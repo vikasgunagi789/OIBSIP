@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Tempora - A modern temperature conversion tool."
+    >
+
+    <title>Tempora | Temperature Converter</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <nav class="navbar">
+
+        <div class="nav-container">
+
+            <a
+                href="#"
+                class="logo"
+            >
+                <span class="logo-icon">🌡️</span>
+
+                <span>
+                    Tempora
+                </span>
+            </a>
+
+
+            <div class="nav-label">
+
+                OIBSIP · TASK 3
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="main-container">
+
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div class="hero-text">
+
+                <span class="eyebrow">
+                    SIMPLE · FAST · ACCURATE
+                </span>
+
+
+                <h1>
+                    Temperature,
+                    <span>simplified.</span>
+                </h1>
+
+
+                <p>
+                    Convert temperatures between Celsius,
+                    Fahrenheit and Kelvin in seconds.
+                </p>
+
+            </div>
+
+
+            <div class="hero-decoration">
+
+                <div class="sun">
+                    ☀️
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             CONVERTER
+        ========================== -->
+
+        <section class="converter">
+
+
+            <!-- INPUT SIDE -->
+
+            <div class="converter-input">
+
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <span class="number">
+                            01
+                        </span>
+
+                        <h2>
+                            Enter temperature
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="input-wrapper">
+
+                    <input
+                        type="number"
+                        id="temperature"
+                        placeholder="00"
+                        step="any"
+                        autocomplete="off"
+                    >
+
+
+                    <select id="unit">
+
+                        <option value="celsius">
+                            °C
+                        </option>
+
+                        <option value="fahrenheit">
+                            °F
+                        </option>
+
+                        <option value="kelvin">
+                            K
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <p class="input-hint">
+                    Enter a value and select its unit.
+                </p>
+
+
+                <p
+                    id="error"
+                    class="error"
+                ></p>
+
+
+
+                <!-- BUTTONS -->
+
+                <div class="button-group">
+
+                    <button
+                        id="convertBtn"
+                        class="convert-btn"
+                    >
+
+                        Convert
+
+                        <span>
+                            →
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        id="resetBtn"
+                        class="reset-btn"
+                    >
+
+                        Reset
+
+                    </button>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- VISUAL SIDE -->
+
+            <div class="visual-card">
+
+                <div class="temperature-circle">
+
+                    <span id="temperatureIcon">
+                        🌡️
+                    </span>
+
+                </div>
+
+
+                <h3 id="visualTitle">
+                    Ready to convert
+                </h3>
+
+
+                <p id="temperatureMessage">
+                    Enter a temperature
+                    to get started.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             RESULTS
+        ========================== -->
+
+        <section class="results-section">
+
+
+            <div class="results-heading">
+
+                <div>
+
+                    <span class="number">
+                        02
+                    </span>
+
+                    <h2>
+                        Conversion results
+                    </h2>
+
+                </div>
+
+
+                <span class="result-label">
+                    LIVE RESULT
+                </span>
+
+            </div>
+
+
+
+            <div class="results-grid">
+
+
+                <!-- CELSIUS -->
+
+                <article class="result-card">
+
+                    <div class="result-top">
+
+                        <span class="result-symbol">
+                            °C
+                        </span>
+
+                        <span class="result-name">
+                            Celsius
+                        </span>
+
+                    </div>
+
+
+                    <strong
+                        id="celsiusResult"
+                    >
+                        --
+                    </strong>
+
+
+                    <p>
+                        Metric temperature scale
+                    </p>
+
+                </article>
+
+
+
+                <!-- FAHRENHEIT -->
+
+                <article class="result-card">
+
+                    <div class="result-top">
+
+                        <span class="result-symbol">
+                            °F
+                        </span>
+
+                        <span class="result-name">
+                            Fahrenheit
+                        </span>
+
+                    </div>
+
+
+                    <strong
+                        id="fahrenheitResult"
+                    >
+                        --
+                    </strong>
+
+
+                    <p>
+                        Commonly used in the US
+                    </p>
+
+                </article>
+
+
+
+                <!-- KELVIN -->
+
+                <article class="result-card">
+
+                    <div class="result-top">
+
+                        <span class="result-symbol">
+                            K
+                        </span>
+
+                        <span class="result-name">
+                            Kelvin
+                        </span>
+
+                    </div>
+
+
+                    <strong
+                        id="kelvinResult"
+                    >
+                        --
+                    </strong>
+
+
+                    <p>
+                        Scientific temperature scale
+                    </p>
+
+                </article>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             INFO
+        ========================== -->
+
+        <section class="info-section">
+
+            <div class="info-card">
+
+                <span>
+                    💡
+                </span>
+
+                <div>
+
+                    <h3>
+                        Did you know?
+                    </h3>
+
+                    <p>
+                        Absolute zero is the lowest
+                        theoretically possible temperature:
+                        0 K, or −273.15°C.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <span>
+                    ⚡
+                </span>
+
+                <div>
+
+                    <h3>
+                        Quick conversion
+                    </h3>
+
+                    <p>
+                        0°C equals 32°F and
+                        273.15K.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+        <p>
+            Tempora
+        </p>
+
+        <p>
+            Built with HTML · CSS · JavaScript
+        </p>
+
+        <p>
+            OIBSIP Web Development
+        </p>
+
+    </footer>
+
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
