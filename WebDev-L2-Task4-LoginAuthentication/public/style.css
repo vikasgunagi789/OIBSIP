@@ -1,0 +1,1346 @@
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+    min-height: 100vh;
+    font-family: "DM Sans", sans-serif;
+    color: #17191f;
+    background: #f6f7fb;
+}
+
+
+button,
+input {
+    font-family: inherit;
+}
+
+
+button {
+    cursor: pointer;
+}
+
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+
+/* =========================================================
+   AUTH PAGE
+========================================================= */
+
+.auth-page {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 40px 20px;
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(99, 102, 241, 0.10),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 90%,
+            rgba(139, 92, 246, 0.10),
+            transparent 30%
+        ),
+        #f6f7fb;
+}
+
+
+
+/* =========================================================
+   AUTH CONTAINER
+========================================================= */
+
+.auth-container {
+    width: 100%;
+    max-width: 460px;
+}
+
+
+
+/* =========================================================
+   AUTH CARD
+========================================================= */
+
+.auth-card {
+    width: 100%;
+
+    background: #ffffff;
+
+    border: 1px solid #e7e9ef;
+
+    border-radius: 24px;
+
+    padding: 42px;
+
+    box-shadow:
+        0 20px 60px rgba(20, 24, 40, 0.08);
+
+    animation: cardAppear 0.5s ease;
+}
+
+
+@keyframes cardAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.auth-brand {
+    text-align: center;
+
+    margin-bottom: 36px;
+}
+
+
+.auth-logo {
+    display: inline-block;
+
+    font-family: "Outfit", sans-serif;
+
+    font-size: 2rem;
+
+    font-weight: 800;
+
+    letter-spacing: -1px;
+
+    color: #17191f;
+}
+
+
+.auth-logo span {
+    color: #6366f1;
+}
+
+
+.auth-brand p {
+    margin-top: 5px;
+
+    color: #8a909d;
+
+    font-size: 0.72rem;
+
+    letter-spacing: 0.4px;
+}
+
+
+
+/* =========================================================
+   AUTH HEADING
+========================================================= */
+
+.auth-heading {
+    margin-bottom: 25px;
+}
+
+
+.auth-eyebrow {
+    margin-bottom: 9px;
+
+    color: #6366f1;
+
+    font-size: 0.68rem;
+
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+}
+
+
+.auth-heading h1 {
+    font-family: "Outfit", sans-serif;
+
+    font-size: 1.85rem;
+
+    line-height: 1.2;
+
+    letter-spacing: -0.7px;
+
+    color: #17191f;
+
+    margin-bottom: 9px;
+}
+
+
+.auth-heading > p:last-child {
+    color: #8a909d;
+
+    font-size: 0.82rem;
+
+    line-height: 1.6;
+}
+
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+#loginForm,
+#registerForm {
+    width: 100%;
+}
+
+
+.form-group {
+    margin-bottom: 19px;
+}
+
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #353943;
+
+    font-size: 0.76rem;
+
+    font-weight: 600;
+}
+
+
+
+/* =========================================================
+   INPUT WRAPPER
+========================================================= */
+
+.input-wrapper {
+    position: relative;
+
+    width: 100%;
+}
+
+
+.input-wrapper > svg {
+    position: absolute;
+
+    left: 15px;
+    top: 50%;
+
+    width: 18px;
+    height: 18px;
+
+    transform: translateY(-50%);
+
+    color: #9298a5;
+
+    pointer-events: none;
+}
+
+
+.input-wrapper input {
+    width: 100%;
+
+    height: 52px;
+
+    border: 1px solid #dfe2e8;
+
+    border-radius: 11px;
+
+    outline: none;
+
+    padding:
+        0
+        45px
+        0
+        45px;
+
+    background: #fbfcfe;
+
+    color: #20232a;
+
+    font-size: 0.82rem;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.input-wrapper input::placeholder {
+    color: #adb2bd;
+}
+
+
+.input-wrapper input:hover {
+    border-color: #c8ccd5;
+}
+
+
+.input-wrapper input:focus {
+    background: #ffffff;
+
+    border-color: #6366f1;
+
+    box-shadow:
+        0 0 0 4px rgba(99, 102, 241, 0.10);
+}
+
+
+
+/* =========================================================
+   PASSWORD TOGGLE
+========================================================= */
+
+.password-toggle {
+    position: absolute;
+
+    right: 12px;
+    top: 50%;
+
+    width: 30px;
+    height: 30px;
+
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    background: transparent;
+
+    color: #9298a5;
+
+    border-radius: 6px;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.password-toggle:hover {
+    color: #6366f1;
+
+    background: #f1f2ff;
+}
+
+
+.password-toggle svg {
+    width: 17px;
+    height: 17px;
+}
+
+
+
+/* =========================================================
+   PASSWORD LABEL
+========================================================= */
+
+.password-label {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.password-label label {
+    margin-bottom: 8px;
+}
+
+
+
+/* =========================================================
+   PASSWORD REQUIREMENTS
+========================================================= */
+
+.password-requirements {
+    margin-top: -3px;
+
+    margin-bottom: 20px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+.password-requirements p {
+    margin-bottom: 2px;
+
+    color: #737a88;
+
+    font-size: 0.69rem;
+
+    font-weight: 600;
+}
+
+
+.password-requirements span {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #a0a6b2;
+
+    font-size: 0.68rem;
+
+    transition: color 0.2s ease;
+}
+
+
+.password-requirements i {
+    width: 7px;
+    height: 7px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #c7cbd3;
+
+    transition: background 0.2s ease;
+}
+
+
+.password-requirements span.valid {
+    color: #16a34a;
+}
+
+
+.password-requirements span.valid i {
+    background: #22c55e;
+}
+
+
+
+/* =========================================================
+   SUBMIT BUTTON
+========================================================= */
+
+.auth-submit {
+    width: 100%;
+
+    height: 52px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background: #6366f1;
+
+    color: #ffffff;
+
+    font-size: 0.82rem;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 8px 20px rgba(99, 102, 241, 0.20);
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.auth-submit svg {
+    width: 17px;
+    height: 17px;
+
+    transition:
+        transform 0.2s ease;
+}
+
+
+.auth-submit:hover {
+    background: #5558e8;
+
+    box-shadow:
+        0 10px 25px rgba(99, 102, 241, 0.28);
+
+    transform: translateY(-1px);
+}
+
+
+.auth-submit:hover svg {
+    transform: translateX(3px);
+}
+
+
+.auth-submit:active {
+    transform: translateY(0);
+}
+
+
+
+/* =========================================================
+   AUTH SWITCH
+========================================================= */
+
+.auth-switch {
+    margin-top: 26px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    font-size: 0.73rem;
+}
+
+
+.auth-switch span {
+    color: #8b919e;
+}
+
+
+.auth-switch a {
+    color: #6366f1;
+
+    font-weight: 700;
+
+    transition: color 0.2s ease;
+}
+
+
+.auth-switch a:hover {
+    color: #4f46e5;
+
+    text-decoration: underline;
+}
+
+
+
+/* =========================================================
+   AUTH MESSAGES
+========================================================= */
+
+.auth-message {
+    display: none;
+
+    margin-bottom: 18px;
+
+    padding: 11px 14px;
+
+    border-radius: 9px;
+
+    font-size: 0.72rem;
+
+    line-height: 1.5;
+}
+
+
+.auth-message:not(:empty) {
+    display: block;
+}
+
+
+.error-message {
+    border: 1px solid #fecaca;
+
+    background: #fff7f7;
+
+    color: #dc2626;
+}
+
+
+.success-message {
+    border: 1px solid #bbf7d0;
+
+    background: #f0fdf4;
+
+    color: #15803d;
+}
+
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+.dashboard-page {
+    min-height: 100vh;
+
+    background: #f6f7fb;
+}
+
+
+
+/* =========================================================
+   DASHBOARD HEADER
+========================================================= */
+
+.dashboard-header {
+    width: 100%;
+
+    background: #ffffff;
+
+    border-bottom: 1px solid #e8eaf0;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 100;
+}
+
+
+.dashboard-nav {
+    width: min(1180px, 92%);
+
+    min-height: 76px;
+
+    margin: auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 25px;
+}
+
+
+
+/* =========================================================
+   DASHBOARD LOGO
+========================================================= */
+
+.logo {
+    font-family: "Outfit", sans-serif;
+
+    font-size: 1.65rem;
+
+    font-weight: 800;
+
+    letter-spacing: -0.7px;
+
+    color: #17191f;
+}
+
+
+.logo span {
+    color: #6366f1;
+}
+
+
+
+/* =========================================================
+   DASHBOARD USER
+========================================================= */
+
+.dashboard-user {
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+}
+
+
+.user-avatar {
+    width: 39px;
+    height: 39px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #6366f1;
+
+    color: white;
+
+    font-family: "Outfit", sans-serif;
+
+    font-size: 0.85rem;
+
+    font-weight: 700;
+}
+
+
+.user-info {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 1px;
+
+    margin-right: 10px;
+}
+
+
+.user-info strong {
+    color: #272a32;
+
+    font-size: 0.75rem;
+}
+
+
+.user-info span {
+    color: #979daa;
+
+    font-size: 0.64rem;
+}
+
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+.logout-btn {
+    height: 38px;
+
+    padding: 0 15px;
+
+    border: 1px solid #e0e2e8;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #555b68;
+
+    font-size: 0.7rem;
+
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.logout-btn:hover {
+    background: #fff5f5;
+
+    color: #dc2626;
+
+    border-color: #fecaca;
+}
+
+
+
+/* =========================================================
+   DASHBOARD CONTAINER
+========================================================= */
+
+.dashboard-container {
+    width: min(1180px, 92%);
+
+    margin: auto;
+
+    padding: 55px 0 70px;
+}
+
+
+
+/* =========================================================
+   WELCOME SECTION
+========================================================= */
+
+.welcome-section {
+    margin-bottom: 35px;
+}
+
+
+.welcome-section h1 {
+    font-family: "Outfit", sans-serif;
+
+    font-size: clamp(2rem, 4vw, 3rem);
+
+    line-height: 1.1;
+
+    letter-spacing: -1px;
+
+    color: #17191f;
+
+    margin-bottom: 12px;
+}
+
+
+.welcome-section h1 span {
+    color: #6366f1;
+}
+
+
+.welcome-section > div > p:last-child {
+    max-width: 600px;
+
+    color: #858b98;
+
+    font-size: 0.85rem;
+
+    line-height: 1.7;
+}
+
+
+
+/* =========================================================
+   DASHBOARD GRID
+========================================================= */
+
+.dashboard-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 55px;
+}
+
+
+
+/* =========================================================
+   DASHBOARD CARD
+========================================================= */
+
+.dashboard-card {
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 22px;
+
+    background: #ffffff;
+
+    border: 1px solid #e7e9ef;
+
+    border-radius: 15px;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.dashboard-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 30px rgba(20, 24, 40, 0.06);
+}
+
+
+.dashboard-card-icon {
+    width: 45px;
+    height: 45px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: #f0f1ff;
+
+    color: #6366f1;
+}
+
+
+.dashboard-card-icon svg {
+    width: 21px;
+    height: 21px;
+}
+
+
+.dashboard-card div:last-child {
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+
+.dashboard-card span {
+    color: #989eaa;
+
+    font-size: 0.62rem;
+
+    font-weight: 700;
+
+    letter-spacing: 0.7px;
+}
+
+
+.dashboard-card strong {
+    color: #292c34;
+
+    font-size: 0.76rem;
+}
+
+
+
+/* =========================================================
+   SECTION HEADING
+========================================================= */
+
+.section-heading {
+    margin-bottom: 18px;
+}
+
+
+.section-heading h2 {
+    font-family: "Outfit", sans-serif;
+
+    color: #20232a;
+
+    font-size: 1.45rem;
+
+    letter-spacing: -0.4px;
+}
+
+
+
+/* =========================================================
+   ACCOUNT SECTION
+========================================================= */
+
+.account-section {
+    margin-bottom: 35px;
+}
+
+
+.account-card {
+    background: #ffffff;
+
+    border: 1px solid #e7e9ef;
+
+    border-radius: 15px;
+
+    overflow: hidden;
+}
+
+
+.account-row {
+    min-height: 62px;
+
+    padding: 0 23px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    border-bottom: 1px solid #eef0f4;
+}
+
+
+.account-row:last-child {
+    border-bottom: none;
+}
+
+
+.account-row span {
+    color: #858b98;
+
+    font-size: 0.76rem;
+}
+
+
+.account-row strong {
+    color: #30343c;
+
+    font-size: 0.76rem;
+
+    text-align: right;
+
+    word-break: break-word;
+}
+
+
+.status-active {
+    color: #16a34a !important;
+}
+
+
+
+/* =========================================================
+   SECURITY CARD
+========================================================= */
+
+.security-section {
+    margin-bottom: 35px;
+}
+
+
+.security-card {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 17px;
+
+    padding: 24px;
+
+    background: #f0f1ff;
+
+    border: 1px solid #dfe1ff;
+
+    border-radius: 15px;
+}
+
+
+.security-icon {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #ffffff;
+
+    border-radius: 10px;
+
+    color: #6366f1;
+}
+
+
+.security-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+
+.security-card h3 {
+    margin-bottom: 5px;
+
+    font-family: "Outfit", sans-serif;
+
+    font-size: 0.95rem;
+
+    color: #292c34;
+}
+
+
+.security-card p {
+    max-width: 700px;
+
+    color: #73798a;
+
+    font-size: 0.72rem;
+
+    line-height: 1.65;
+}
+
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.auth-footer {
+    width: min(1180px, 92%);
+
+    margin: 0 auto;
+
+    padding: 22px 0;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    border-top: 1px solid #e3e5ea;
+
+    color: #999fac;
+
+    font-size: 0.65rem;
+}
+
+
+
+/* =========================================================
+   INPUT VALIDATION
+========================================================= */
+
+.input-wrapper input.input-error {
+    border-color: #ef4444;
+}
+
+
+.input-wrapper input.input-success {
+    border-color: #22c55e;
+}
+
+
+
+/* =========================================================
+   SELECTION
+========================================================= */
+
+::selection {
+    background: #6366f1;
+
+    color: #ffffff;
+}
+
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+
+::-webkit-scrollbar-track {
+    background: #f1f2f5;
+}
+
+
+::-webkit-scrollbar-thumb {
+    background: #c8cbd4;
+
+    border-radius: 10px;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+    background: #aeb2bd;
+}
+
+
+
+/* =========================================================
+   RESPONSIVE — TABLET
+========================================================= */
+
+@media (max-width: 850px) {
+
+    .dashboard-grid {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+}
+
+
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .auth-page {
+        padding: 20px 14px;
+    }
+
+
+    .auth-card {
+        padding: 30px 22px;
+
+        border-radius: 18px;
+    }
+
+
+    .auth-brand {
+        margin-bottom: 28px;
+    }
+
+
+    .auth-heading h1 {
+        font-size: 1.55rem;
+    }
+
+
+    .auth-heading > p:last-child {
+        font-size: 0.76rem;
+    }
+
+
+    .dashboard-nav {
+        min-height: 68px;
+
+        width: 92%;
+    }
+
+
+    .logo {
+        font-size: 1.4rem;
+    }
+
+
+    .user-info {
+        display: none;
+    }
+
+
+    .dashboard-user {
+        gap: 8px;
+    }
+
+
+    .user-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+
+    .logout-btn {
+        height: 35px;
+
+        padding: 0 11px;
+    }
+
+
+    .dashboard-container {
+        padding: 40px 0 50px;
+    }
+
+
+    .welcome-section h1 {
+        font-size: 2rem;
+    }
+
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+
+        margin-bottom: 40px;
+    }
+
+
+    .dashboard-card {
+        padding: 18px;
+    }
+
+
+    .account-row {
+        min-height: auto;
+
+        padding: 16px 18px;
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 5px;
+    }
+
+
+    .account-row strong {
+        text-align: left;
+    }
+
+
+    .security-card {
+        padding: 19px;
+    }
+
+
+    .auth-footer {
+        flex-direction: column;
+
+        text-align: center;
+
+        align-items: center;
+    }
+
+}
+
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .auth-card {
+        padding: 25px 17px;
+    }
+
+
+    .auth-logo {
+        font-size: 1.75rem;
+    }
+
+
+    .auth-heading h1 {
+        font-size: 1.4rem;
+    }
+
+
+    .input-wrapper input {
+        height: 49px;
+    }
+
+
+    .auth-submit {
+        height: 49px;
+    }
+
+}

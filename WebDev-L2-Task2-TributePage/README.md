@@ -11,11 +11,7 @@ Web Development & Designing Internship.
 
 ## 🌐 Live Demo
 
-Add your GitHub Pages URL here after deployment.
-
-Example:
-
-https://yourusername.github.io/OIBSIP/WebDev-L2-Task2-TributePage/
+https://vikasgunagi789.github.io/OIBSIP/WebDev-L2-Task2-TributePage/
 
 ---
 

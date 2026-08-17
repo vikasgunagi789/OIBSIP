@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Dashboard | TaskFlow</title>
+
+
+    <!-- GOOGLE FONTS -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- CSS -->
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body class="dashboard-page">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="dashboard-header">
+
+        <nav class="dashboard-nav">
+
+
+            <!-- LOGO -->
+
+            <a
+                href="dashboard.html"
+                class="logo"
+            >
+                Task<span>Flow</span>
+            </a>
+
+
+            <!-- USER AREA -->
+
+            <div class="dashboard-user">
+
+
+                <!-- AVATAR -->
+
+                <div
+                    class="user-avatar"
+                    id="userAvatar"
+                >
+                    U
+                </div>
+
+
+                <!-- USER INFORMATION -->
+
+                <div class="user-info">
+
+                    <strong id="navUsername">
+                        User
+                    </strong>
+
+                    <span id="navEmail">
+                        user@example.com
+                    </span>
+
+                </div>
+
+
+                <!-- LOGOUT -->
+
+                <button
+                    class="logout-btn"
+                    id="logoutBtn"
+                    type="button"
+                >
+                    Logout
+                </button>
+
+
+            </div>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="dashboard-container">
+
+
+        <!-- =================================================
+             WELCOME
+        ================================================== -->
+
+        <section class="welcome-section">
+
+            <div>
+
+                <p class="auth-eyebrow">
+                    PERSONAL DASHBOARD
+                </p>
+
+                <h1>
+                    Welcome,
+                    <span id="welcomeUsername">
+                        User
+                    </span>
+                </h1>
+
+                <p>
+                    Your account is active and ready.
+                    Manage your profile and keep track
+                    of your account information from here.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             STAT CARDS
+        ================================================== -->
+
+        <section class="dashboard-grid">
+
+
+            <!-- ACCOUNT CARD -->
+
+            <div class="dashboard-card">
+
+                <div class="dashboard-card-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+
+                        <circle
+                            cx="12"
+                            cy="8"
+                            r="4"
+                        />
+
+                        <path
+                            d="M4 21c0-4 3.5-7 8-7s8 3 8 7"
+                        />
+
+                    </svg>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        ACCOUNT
+                    </span>
+
+                    <strong>
+                        Active
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- LOGIN STATUS -->
+
+            <div class="dashboard-card">
+
+                <div class="dashboard-card-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+
+                        <path
+                            d="M12 3a9 9 0 1 0 9 9"
+                        />
+
+                        <path
+                            d="M12 7v5l3 2"
+                        />
+
+                    </svg>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        LOGIN STATUS
+                    </span>
+
+                    <strong>
+                        Currently Logged In
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- SECURITY -->
+
+            <div class="dashboard-card">
+
+                <div class="dashboard-card-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+
+                        <path
+                            d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"
+                        />
+
+                        <path
+                            d="M9 12l2 2 4-4"
+                        />
+
+                    </svg>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        SECURITY
+                    </span>
+
+                    <strong>
+                        Protected
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             ACCOUNT INFORMATION
+        ================================================== -->
+
+        <section class="account-section">
+
+
+            <div class="section-heading">
+
+                <p class="auth-eyebrow">
+                    ACCOUNT
+                </p>
+
+                <h2>
+                    Account Information
+                </h2>
+
+            </div>
+
+
+
+            <div class="account-card">
+
+
+                <!-- USERNAME -->
+
+                <div class="account-row">
+
+                    <span>
+                        Username
+                    </span>
+
+                    <strong id="accountUsername">
+                        User
+                    </strong>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="account-row">
+
+                    <span>
+                        Email Address
+                    </span>
+
+                    <strong id="accountEmail">
+                        user@example.com
+                    </strong>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="account-row">
+
+                    <span>
+                        Account Status
+                    </span>
+
+                    <strong class="status-active">
+                        Active
+                    </strong>
+
+                </div>
+
+
+                <!-- LOGIN -->
+
+                <div class="account-row">
+
+                    <span>
+                        Session
+                    </span>
+
+                    <strong>
+                        Authenticated
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SECURITY INFORMATION
+        ================================================== -->
+
+        <section class="security-section">
+
+            <div class="security-card">
+
+
+                <div class="security-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+
+                        <rect
+                            x="5"
+                            y="10"
+                            width="14"
+                            height="10"
+                            rx="2"
+                        />
+
+                        <path
+                            d="M8 10V7a4 4 0 0 1 8 0v3"
+                        />
+
+                    </svg>
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        Secure Session
+                    </h3>
+
+                    <p>
+                        You are viewing a protected page.
+                        Your session is verified using browser
+                        storage. Logging out will immediately
+                        remove the active session and return
+                        you to the login page.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="auth-footer">
+
+        <span>
+            © 2026 TaskFlow
+        </span>
+
+        <span>
+            Secure Authentication System
+        </span>
+
+    </footer>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+        /* =================================================
+           CHECK LOGIN SESSION
+        ================================================= */
+
+        const loggedIn =
+            localStorage.getItem("isLoggedIn");
+
+
+        /*
+            If the user is not logged in,
+            send them back to login page.
+        */
+
+        if (loggedIn !== "true") {
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+
+        /* =================================================
+           GET USER INFORMATION
+        ================================================= */
+
+        const username =
+            localStorage.getItem("username");
+
+        const email =
+            localStorage.getItem("email");
+
+
+
+        /* =================================================
+           DISPLAY USERNAME
+        ================================================= */
+
+        const welcomeUsername =
+            document.getElementById(
+                "welcomeUsername"
+            );
+
+        const navUsername =
+            document.getElementById(
+                "navUsername"
+            );
+
+        const accountUsername =
+            document.getElementById(
+                "accountUsername"
+            );
+
+
+        if (username) {
+
+            welcomeUsername.textContent =
+                username;
+
+            navUsername.textContent =
+                username;
+
+            accountUsername.textContent =
+                username;
+
+        }
+
+
+
+        /* =================================================
+           DISPLAY EMAIL
+        ================================================= */
+
+        const navEmail =
+            document.getElementById(
+                "navEmail"
+            );
+
+        const accountEmail =
+            document.getElementById(
+                "accountEmail"
+            );
+
+
+        if (email) {
+
+            navEmail.textContent =
+                email;
+
+            accountEmail.textContent =
+                email;
+
+        }
+
+
+
+        /* =================================================
+           CREATE USER AVATAR
+        ================================================= */
+
+        const userAvatar =
+            document.getElementById(
+                "userAvatar"
+            );
+
+
+        if (username) {
+
+            userAvatar.textContent =
+                username
+                    .charAt(0)
+                    .toUpperCase();
+
+        }
+
+
+
+        /* =================================================
+           LOGOUT
+        ================================================= */
+
+        const logoutBtn =
+            document.getElementById(
+                "logoutBtn"
+            );
+
+
+        logoutBtn.addEventListener(
+            "click",
+            function () {
+
+
+                /*
+                    Remove authentication session
+                */
+
+                localStorage.removeItem(
+                    "isLoggedIn"
+                );
+
+
+                /*
+                    Redirect to login
+                */
+
+                window.location.href =
+                    "login.html";
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>
