@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="A modern responsive scientific calculator built with HTML, CSS and JavaScript."
+    >
+
+    <meta
+        name="author"
+        content="Vikas Gunagi"
+    >
+
+    <title>Calcura | Scientific Calculator</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================
+         MAIN APP
+    ====================================== -->
+
+    <main class="calculator">
+
+
+        <!-- =================================
+             HEADER
+        ================================== -->
+
+        <header class="calculator-header">
+
+            <div class="brand">
+
+                <span class="brand-icon">
+                    ∑
+                </span>
+
+                <div>
+
+                    <h1>
+                        Calcura
+                    </h1>
+
+                    <p>
+                        Scientific Calculator
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="header-controls">
+
+                <button
+                    id="angleMode"
+                    class="mode-btn"
+                    type="button"
+                >
+                    DEG
+                </button>
+
+
+                <button
+                    id="themeToggle"
+                    class="theme-btn"
+                    type="button"
+                    aria-label="Toggle theme"
+                >
+                    ☾
+                </button>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================
+             DISPLAY
+        ================================== -->
+
+        <section
+            class="display"
+            aria-label="Calculator display"
+        >
+
+            <div
+                id="historyDisplay"
+                class="history-display"
+            >
+                &nbsp;
+            </div>
+
+
+            <div
+                id="expressionDisplay"
+                class="expression-display"
+            >
+                0
+            </div>
+
+
+            <div
+                id="resultDisplay"
+                class="result-display"
+            >
+                0
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================
+             SCIENTIFIC FUNCTIONS
+        ================================== -->
+
+        <section
+            class="scientific-buttons"
+            aria-label="Scientific functions"
+        >
+
+
+            <!-- Row 1 -->
+
+            <button
+                class="calc-btn function-btn"
+                data-action="sin"
+                type="button"
+            >
+                sin
+            </button>
+
+
+            <button
+                class="calc-btn function-btn"
+                data-action="cos"
+                type="button"
+            >
+                cos
+            </button>
+
+
+            <button
+                class="calc-btn function-btn"
+                data-action="tan"
+                type="button"
+            >
+                tan
+            </button>
+
+
+            <button
+                class="calc-btn function-btn"
+                data-action="log"
+                type="button"
+            >
+                log
+            </button>
+
+
+            <button
+                class="calc-btn function-btn"
+                data-action="ln"
+                type="button"
+            >
+                ln
+            </button>
+
+
+            <button
+                class="calc-btn function-btn"
+                data-action="sqrt"
+                type="button"
+            >
+                √
+            </button>
+
+
+            <!-- Row 2 -->
+
+            <button
+                class="calc-btn function-btn"
+                data-action="asin"
+                type="button"
+            >
+                sin⁻¹
+            </button>
+
+
+            <button
+                class="calc-btn function-btn"
+                data-action="acos"
+                type="button"
+            >
+                cos⁻¹
+            </button>
+
+
+            <button
+                class="calc-btn function-btn"
+                data-action="atan"
+                type="button"
+            >
+                tan⁻¹
+            </button>
+
+
+            <button
+                class="calc-btn function-btn"
+                data-action="square"
+                type="button"
+            >
+                x²
+            </button>
+
+
+            <button
+                class="calc-btn function-btn"
+                data-action="power"
+                type="button"
+            >
+                xʸ
+            </button>
+
+
+            <button
+                class="calc-btn function-btn"
+                data-action="factorial"
+                type="button"
+            >
+                x!
+            </button>
+
+
+            <!-- Row 3 -->
+
+            <button
+                class="calc-btn function-btn"
+                data-action="pi"
+                type="button"
+            >
+                π
+            </button>
+
+
+            <button
+                class="calc-btn function-btn"
+                data-action="e"
+                type="button"
+            >
+                e
+            </button>
+
+
+            <button
+                class="calc-btn function-btn"
+                data-action="percent"
+                type="button"
+            >
+                %
+            </button>
+
+
+            <button
+                class="calc-btn function-btn"
+                data-action="open-bracket"
+                type="button"
+            >
+                (
+            </button>
+
+
+            <button
+                class="calc-btn function-btn"
+                data-action="close-bracket"
+                type="button"
+            >
+                )
+            </button>
+
+
+            <button
+                class="calc-btn function-btn"
+                data-action="sign"
+                type="button"
+            >
+                ±
+            </button>
+
+        </section>
+
+
+
+        <!-- =================================
+             BASIC CALCULATOR
+        ================================== -->
+
+        <section
+            class="basic-buttons"
+            aria-label="Calculator buttons"
+        >
+
+
+            <!-- Row 1 -->
+
+            <button
+                class="calc-btn clear-btn"
+                data-action="clear"
+                type="button"
+            >
+                AC
+            </button>
+
+
+            <button
+                class="calc-btn delete-btn"
+                data-action="delete"
+                type="button"
+            >
+                DEL
+            </button>
+
+
+            <button
+                class="calc-btn operator-btn"
+                data-operator="%"
+                type="button"
+            >
+                %
+            </button>
+
+
+            <button
+                class="calc-btn operator-btn"
+                data-operator="÷"
+                type="button"
+            >
+                ÷
+            </button>
+
+
+
+            <!-- Row 2 -->
+
+            <button
+                class="calc-btn number-btn"
+                data-number="7"
+                type="button"
+            >
+                7
+            </button>
+
+
+            <button
+                class="calc-btn number-btn"
+                data-number="8"
+                type="button"
+            >
+                8
+            </button>
+
+
+            <button
+                class="calc-btn number-btn"
+                data-number="9"
+                type="button"
+            >
+                9
+            </button>
+
+
+            <button
+                class="calc-btn operator-btn"
+                data-operator="×"
+                type="button"
+            >
+                ×
+            </button>
+
+
+
+            <!-- Row 3 -->
+
+            <button
+                class="calc-btn number-btn"
+                data-number="4"
+                type="button"
+            >
+                4
+            </button>
+
+
+            <button
+                class="calc-btn number-btn"
+                data-number="5"
+                type="button"
+            >
+                5
+            </button>
+
+
+            <button
+                class="calc-btn number-btn"
+                data-number="6"
+                type="button"
+            >
+                6
+            </button>
+
+
+            <button
+                class="calc-btn operator-btn"
+                data-operator="−"
+                type="button"
+            >
+                −
+            </button>
+
+
+
+            <!-- Row 4 -->
+
+            <button
+                class="calc-btn number-btn"
+                data-number="1"
+                type="button"
+            >
+                1
+            </button>
+
+
+            <button
+                class="calc-btn number-btn"
+                data-number="2"
+                type="button"
+            >
+                2
+            </button>
+
+
+            <button
+                class="calc-btn number-btn"
+                data-number="3"
+                type="button"
+            >
+                3
+            </button>
+
+
+            <button
+                class="calc-btn operator-btn"
+                data-operator="+"
+                type="button"
+            >
+                +
+            </button>
+
+
+
+            <!-- Row 5 -->
+
+            <button
+                class="calc-btn number-btn zero-btn"
+                data-number="0"
+                type="button"
+            >
+                0
+            </button>
+
+
+            <button
+                class="calc-btn number-btn"
+                data-number="."
+                type="button"
+            >
+                .
+            </button>
+
+
+            <button
+                class="calc-btn equals-btn"
+                data-action="equals"
+                type="button"
+            >
+                =
+            </button>
+
+        </section>
+
+
+
+        <!-- =================================
+             KEYBOARD SHORTCUTS
+        ================================== -->
+
+        <div class="keyboard-info">
+
+            <span>
+                ⌨️ Keyboard supported
+            </span>
+
+            <span>
+                Enter = Calculate
+            </span>
+
+        </div>
+
+
+
+        <!-- =================================
+             FOOTER
+        ================================== -->
+
+        <footer>
+
+            <span>
+                Calcura
+            </span>
+
+            <span>
+                OIBSIP · Web Development · Level 2
+            </span>
+
+        </footer>
+
+
+    </main>
+
+
+
+    <!-- =====================================
+         JAVASCRIPT
+    ====================================== -->
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

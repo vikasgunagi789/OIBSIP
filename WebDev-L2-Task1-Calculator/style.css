@@ -1,0 +1,1020 @@
+/* =========================================
+   RESET
+========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   ROOT VARIABLES
+========================================= */
+
+:root {
+
+    --body-bg: #080b14;
+
+    --calculator-bg: #111624;
+
+    --display-bg: #080b13;
+
+    --button-bg: #1b2132;
+
+    --button-hover: #252d43;
+
+    --function-bg: #171d2d;
+
+    --function-hover: #222a3e;
+
+    --operator-bg: #3847d6;
+
+    --operator-hover: #4b5af0;
+
+    --equals-bg: #635bff;
+
+    --equals-hover: #756eff;
+
+    --clear-bg: #a8324a;
+
+    --clear-hover: #c23d58;
+
+    --delete-bg: #8b5e34;
+
+    --delete-hover: #a86f3e;
+
+    --text-primary: #f8fafc;
+
+    --text-secondary: #9aa5ba;
+
+    --text-muted: #68748c;
+
+    --border: rgba(255, 255, 255, 0.07);
+
+    --shadow:
+        0 35px 90px rgba(0, 0, 0, 0.5);
+
+}
+
+
+/* =========================================
+   BODY
+========================================= */
+
+body {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 30px 15px;
+
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color: var(--text-primary);
+
+    background:
+
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(99, 91, 255, 0.20),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 90% 90%,
+            rgba(56, 71, 214, 0.16),
+            transparent 30%
+        ),
+
+        var(--body-bg);
+
+}
+
+
+/* =========================================
+   CALCULATOR
+========================================= */
+
+.calculator {
+
+    width: min(
+        480px,
+        100%
+    );
+
+    padding: 22px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 30px;
+
+    background:
+        rgba(17, 22, 36, 0.94);
+
+    box-shadow:
+        var(--shadow);
+
+    backdrop-filter:
+        blur(20px);
+
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.calculator-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+
+}
+
+
+.brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.brand-icon {
+
+    width: 46px;
+
+    height: 46px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 14px;
+
+    color: white;
+
+    font-size: 1.4rem;
+
+    font-weight: 700;
+
+    background:
+        linear-gradient(
+            145deg,
+            #635bff,
+            #4338ca
+        );
+
+    box-shadow:
+        0 8px 25px
+        rgba(99, 91, 255, 0.25);
+
+}
+
+
+.brand h1 {
+
+    font-size: 1.35rem;
+
+    letter-spacing: -0.5px;
+
+}
+
+
+.brand p {
+
+    margin-top: 3px;
+
+    color: var(--text-muted);
+
+    font-size: 0.7rem;
+
+}
+
+
+/* =========================================
+   HEADER CONTROLS
+========================================= */
+
+.header-controls {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+}
+
+
+.mode-btn,
+.theme-btn {
+
+    height: 38px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 10px;
+
+    color:
+        var(--text-secondary);
+
+    background:
+        var(--function-bg);
+
+    font-size: 0.7rem;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        0.2s ease;
+
+}
+
+
+.mode-btn {
+
+    min-width: 48px;
+
+    padding:
+        0 10px;
+
+}
+
+
+.theme-btn {
+
+    width: 38px;
+
+    font-size: 1rem;
+
+}
+
+
+.mode-btn:hover,
+.theme-btn:hover {
+
+    color:
+        var(--text-primary);
+
+    background:
+        var(--function-hover);
+
+    border-color:
+        rgba(99, 91, 255, 0.3);
+
+}
+
+
+/* =========================================
+   DISPLAY
+========================================= */
+
+.display {
+
+    min-height: 170px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: flex-end;
+
+    align-items: flex-end;
+
+    padding: 22px;
+
+    margin-bottom: 14px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 20px;
+
+    background:
+        var(--display-bg);
+
+}
+
+
+.history-display {
+
+    width: 100%;
+
+    min-height: 20px;
+
+    overflow: hidden;
+
+    color:
+        var(--text-muted);
+
+    font-size: 0.75rem;
+
+    text-align: right;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+}
+
+
+.expression-display {
+
+    width: 100%;
+
+    min-height: 28px;
+
+    margin-top: 5px;
+
+    overflow: hidden;
+
+    color:
+        var(--text-secondary);
+
+    font-size: 0.95rem;
+
+    text-align: right;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+}
+
+
+.result-display {
+
+    width: 100%;
+
+    margin-top: 6px;
+
+    overflow: hidden;
+
+    color:
+        var(--text-primary);
+
+    font-size:
+        clamp(
+            2rem,
+            8vw,
+            3.2rem
+        );
+
+    font-weight: 700;
+
+    letter-spacing: -1px;
+
+    line-height: 1.1;
+
+    text-align: right;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+}
+
+
+/* =========================================
+   SCIENTIFIC BUTTON GRID
+========================================= */
+
+.scientific-buttons {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(6, 1fr);
+
+    gap: 8px;
+
+    margin-bottom: 10px;
+
+}
+
+
+/* =========================================
+   BASIC BUTTON GRID
+========================================= */
+
+.basic-buttons {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 9px;
+
+}
+
+
+/* =========================================
+   ALL BUTTONS
+========================================= */
+
+.calc-btn {
+
+    min-height: 56px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.035);
+
+    border-radius: 13px;
+
+    color:
+        var(--text-primary);
+
+    font-family: inherit;
+
+    font-size: 0.95rem;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    user-select: none;
+
+    transition:
+        transform 0.12s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+.calc-btn:hover {
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+.calc-btn:active {
+
+    transform:
+        scale(0.94);
+
+}
+
+
+/* =========================================
+   SCIENTIFIC FUNCTIONS
+========================================= */
+
+.function-btn {
+
+    background:
+        var(--function-bg);
+
+    color:
+        #b9c2d4;
+
+}
+
+
+.function-btn:hover {
+
+    background:
+        var(--function-hover);
+
+    color:
+        white;
+
+    border-color:
+        rgba(99, 91, 255, 0.2);
+
+}
+
+
+/* =========================================
+   NUMBER BUTTONS
+========================================= */
+
+.number-btn {
+
+    background:
+        var(--button-bg);
+
+    font-size: 1.05rem;
+
+}
+
+
+.number-btn:hover {
+
+    background:
+        var(--button-hover);
+
+}
+
+
+/* =========================================
+   OPERATOR BUTTONS
+========================================= */
+
+.operator-btn {
+
+    background:
+        var(--operator-bg);
+
+    color: white;
+
+    font-size: 1.1rem;
+
+}
+
+
+.operator-btn:hover {
+
+    background:
+        var(--operator-hover);
+
+    box-shadow:
+        0 7px 20px
+        rgba(56, 71, 214, 0.25);
+
+}
+
+
+/* =========================================
+   CLEAR BUTTON
+========================================= */
+
+.clear-btn {
+
+    background:
+        var(--clear-bg);
+
+    color: white;
+
+}
+
+
+.clear-btn:hover {
+
+    background:
+        var(--clear-hover);
+
+}
+
+
+/* =========================================
+   DELETE BUTTON
+========================================= */
+
+.delete-btn {
+
+    background:
+        var(--delete-bg);
+
+    color: white;
+
+}
+
+
+.delete-btn:hover {
+
+    background:
+        var(--delete-hover);
+
+}
+
+
+/* =========================================
+   EQUALS
+========================================= */
+
+.equals-btn {
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--equals-bg),
+            #4f46e5
+        );
+
+    color: white;
+
+    font-size: 1.2rem;
+
+}
+
+
+.equals-btn:hover {
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--equals-hover),
+            #5b52ee
+        );
+
+    box-shadow:
+        0 10px 25px
+        rgba(99, 91, 255, 0.25);
+
+}
+
+
+/* =========================================
+   ZERO BUTTON
+========================================= */
+
+.zero-btn {
+
+    grid-column:
+        span 2;
+
+}
+
+
+/* =========================================
+   KEYBOARD INFO
+========================================= */
+
+.keyboard-info {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-top: 15px;
+
+    padding:
+        0 4px;
+
+    color:
+        var(--text-muted);
+
+    font-size: 0.62rem;
+
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+footer {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-top: 18px;
+
+    padding-top: 15px;
+
+    border-top:
+        1px solid
+        var(--border);
+
+    color:
+        var(--text-muted);
+
+    font-size: 0.6rem;
+
+}
+
+
+/* =========================================
+   ERROR STATE
+========================================= */
+
+.calculator.error
+.display {
+
+    border-color:
+        rgba(239, 68, 68, 0.5);
+
+    box-shadow:
+        0 0 20px
+        rgba(239, 68, 68, 0.08);
+
+}
+
+
+.calculator.error
+.result-display {
+
+    color:
+        #f87171;
+
+}
+
+
+/* =========================================
+   LIGHT THEME
+========================================= */
+
+body.light {
+
+    --body-bg: #eef2ff;
+
+    --calculator-bg: #ffffff;
+
+    --display-bg: #f5f7fb;
+
+    --button-bg: #e9edf5;
+
+    --button-hover: #dce2ee;
+
+    --function-bg: #eef1f7;
+
+    --function-hover: #e1e6f0;
+
+    --text-primary: #111827;
+
+    --text-secondary: #4b5563;
+
+    --text-muted: #6b7280;
+
+    --border:
+        rgba(0, 0, 0, 0.08);
+
+}
+
+
+body.light .calculator {
+
+    background:
+        rgba(255, 255, 255, 0.92);
+
+    box-shadow:
+        0 30px 80px
+        rgba(40, 50, 80, 0.18);
+
+}
+
+
+body.light .number-btn {
+
+    color:
+        #111827;
+
+}
+
+
+body.light .function-btn {
+
+    color:
+        #4b5563;
+
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 600px) {
+
+    body {
+
+        padding:
+            18px 12px;
+
+        align-items:
+            flex-start;
+
+    }
+
+
+    .calculator {
+
+        margin-top: 5px;
+
+        padding: 17px;
+
+        border-radius: 24px;
+
+    }
+
+
+    .scientific-buttons {
+
+        gap: 7px;
+
+    }
+
+
+    .basic-buttons {
+
+        gap: 8px;
+
+    }
+
+
+    .calc-btn {
+
+        min-height: 54px;
+
+    }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 430px) {
+
+    .calculator {
+
+        padding: 13px;
+
+    }
+
+
+    .brand-icon {
+
+        width: 40px;
+
+        height: 40px;
+
+        border-radius: 11px;
+
+        font-size: 1.2rem;
+
+    }
+
+
+    .brand h1 {
+
+        font-size: 1.15rem;
+
+    }
+
+
+    .brand p {
+
+        font-size: 0.62rem;
+
+    }
+
+
+    .mode-btn,
+    .theme-btn {
+
+        height: 34px;
+
+    }
+
+
+    .theme-btn {
+
+        width: 34px;
+
+    }
+
+
+    .display {
+
+        min-height: 145px;
+
+        padding: 17px;
+
+        border-radius: 17px;
+
+    }
+
+
+    .scientific-buttons {
+
+        gap: 5px;
+
+    }
+
+
+    .basic-buttons {
+
+        gap: 7px;
+
+    }
+
+
+    .calc-btn {
+
+        min-height: 50px;
+
+        border-radius: 11px;
+
+        font-size: 0.82rem;
+
+    }
+
+
+    .number-btn {
+
+        font-size: 0.95rem;
+
+    }
+
+
+    .keyboard-info {
+
+        font-size: 0.55rem;
+
+    }
+
+
+    footer {
+
+        font-size: 0.53rem;
+
+    }
+
+}
+
+
+/* =========================================
+   VERY SMALL PHONES
+========================================= */
+
+@media (max-width: 340px) {
+
+    .calculator {
+
+        padding: 10px;
+
+    }
+
+
+    .display {
+
+        min-height: 125px;
+
+        padding: 14px;
+
+    }
+
+
+    .calc-btn {
+
+        min-height: 45px;
+
+        border-radius: 9px;
+
+        font-size: 0.72rem;
+
+    }
+
+
+    .scientific-buttons {
+
+        gap: 4px;
+
+    }
+
+
+    .basic-buttons {
+
+        gap: 5px;
+
+    }
+
+
+    .keyboard-info {
+
+        display: none;
+
+    }
+
+}
