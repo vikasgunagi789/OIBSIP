@@ -12,7 +12,7 @@ Add your GitHub Pages / deployed website link here.
 
 Example:
 
-https://vikasgunagi789.github.io/OIBSIP/WebDev-L2-Task1-ScientificCalculator/
+https://vikasgunagi789.github.io/OIBSIP/WebDev-L2-Task1-Calculator/
 
 ---
 
