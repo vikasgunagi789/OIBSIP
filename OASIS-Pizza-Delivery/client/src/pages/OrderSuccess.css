@@ -1,0 +1,308 @@
+.success-page {
+
+    min-height: 100vh;
+
+    background:
+        #f8f7f4;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 30px;
+
+}
+
+
+.success-card {
+
+    width: 100%;
+
+    max-width: 520px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e1da;
+
+    border-radius: 24px;
+
+    padding: 45px 35px;
+
+    text-align: center;
+
+    box-shadow:
+        0 20px 60px
+        rgba(0,0,0,0.07);
+
+}
+
+
+.success-icon {
+
+    width: 72px;
+
+    height: 72px;
+
+    margin: 0 auto 20px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #e8f8ed;
+
+    color: #28a745;
+
+    font-size: 28px;
+
+}
+
+
+.success-brand {
+
+    color: #e53935;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 3px;
+
+    margin: 0 0 8px;
+
+}
+
+
+.success-card h1 {
+
+    font-size: 34px;
+
+    margin: 0;
+
+}
+
+
+.success-message {
+
+    color: #777;
+
+    font-size: 14px;
+
+    margin: 10px auto 25px;
+
+}
+
+
+.order-number {
+
+    background: #f7f5f1;
+
+    border-radius: 12px;
+
+    padding: 15px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+}
+
+
+.order-number span {
+
+    color: #888;
+
+    font-size: 12px;
+
+}
+
+
+.order-number strong {
+
+    font-size: 13px;
+
+}
+
+
+.success-status {
+
+    margin-top: 15px;
+
+    padding: 16px;
+
+    border-radius: 12px;
+
+    background: #fff3ef;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    text-align: left;
+
+}
+
+
+.success-status > i {
+
+    width: 40px;
+
+    height: 40px;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #e53935;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.success-status div {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+}
+
+
+.success-status strong {
+
+    font-size: 13px;
+
+}
+
+
+.success-status span {
+
+    color: #888;
+
+    font-size: 11px;
+
+}
+
+
+.success-total {
+
+    margin-top: 20px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+}
+
+
+.success-total span {
+
+    color: #777;
+
+    font-size: 12px;
+
+}
+
+
+.success-total strong {
+
+    font-size: 23px;
+
+}
+
+
+.success-buttons {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+
+    margin-top: 25px;
+
+}
+
+
+.success-buttons button {
+
+    border: none;
+
+    padding: 13px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    font-weight: 700;
+
+}
+
+
+.primary-success-button {
+
+    background: #e53935;
+
+    color: #ffffff;
+
+}
+
+
+.secondary-success-button {
+
+    background: #191919;
+
+    color: #ffffff;
+
+}
+
+
+@media (max-width: 500px) {
+
+    .success-page {
+
+        padding: 15px;
+
+    }
+
+
+    .success-card {
+
+        padding: 35px 20px;
+
+    }
+
+
+    .success-card h1 {
+
+        font-size: 28px;
+
+    }
+
+
+    .success-buttons {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
