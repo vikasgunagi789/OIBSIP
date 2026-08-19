@@ -135,7 +135,9 @@ function OrderSuccess() {
                     <button
                         className="primary-success-button"
                         onClick={() =>
-                            navigate("/orders")
+                            navigate(
+            `/track-order/${order._id}`
+        )
                         }
                     >
 

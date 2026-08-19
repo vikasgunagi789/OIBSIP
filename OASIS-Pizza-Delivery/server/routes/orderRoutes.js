@@ -114,6 +114,87 @@ router.post(
 
 );
 
+module.exports = router;
+
+// =====================================================
+// GET SINGLE ORDER
+// =====================================================
+
+router.get(
+    "/:id",
+    authMiddleware,
+    async (req, res) => {
+
+        try {
+
+            const order =
+                await Order.findById(req.params.id)
+                    .populate(
+                        "user",
+                        "name email"
+                    );
+
+
+            if (!order) {
+
+                return res.status(404).json({
+
+                    message:
+                        "Order not found."
+
+                });
+
+            }
+
+
+            // Make sure the user can only
+            // view their own order
+
+            if (
+                order.user._id.toString() !==
+                req.user._id.toString()
+            ) {
+
+                return res.status(403).json({
+
+                    message:
+                        "You are not authorized to view this order."
+
+                });
+
+            }
+
+
+            res.json({
+
+                success: true,
+
+                order
+
+            });
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Get order error:",
+                error
+            );
+
+
+            res.status(500).json({
+
+                message:
+                    "Failed to fetch order."
+
+            });
+
+        }
+
+    }
+);
+
 
 /*
 =====================================================

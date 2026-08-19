@@ -15,6 +15,7 @@ import Menu from "./pages/Menu";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
+import TrackOrder from "./pages/TrackOrder";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -113,6 +114,11 @@ function App() {
                 <Route
                     path="/order-success"
                     element={<OrderSuccess />}
+                />
+
+                <Route
+                    path="/track-order/:id"
+                    element={<TrackOrder />}
                 />
                                   
 
