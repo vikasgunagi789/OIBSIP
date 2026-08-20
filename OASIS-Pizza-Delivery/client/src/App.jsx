@@ -16,6 +16,10 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
 import TrackOrder from "./pages/TrackOrder";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminInventory from "./pages/AdminInventory";
+import AdminOrders from "./pages/AdminOrders";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -119,6 +123,26 @@ function App() {
                 <Route
                     path="/track-order/:id"
                     element={<TrackOrder />}
+                />
+
+                <Route
+                    path="/admin/login"
+                    element={<AdminLogin />}
+                />
+
+                <Route
+                    path="/admin/dashboard"
+                    element={<AdminDashboard />}
+                />
+
+                <Route
+                    path="/admin/inventory"
+                    element={<AdminInventory />}
+                />
+
+                <Route
+                    path="/admin/orders"
+                    element={<AdminOrders />}
                 />
                                   
 

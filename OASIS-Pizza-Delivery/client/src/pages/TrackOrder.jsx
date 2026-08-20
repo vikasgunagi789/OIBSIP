@@ -1,6 +1,16 @@
-import { useNavigate, useParams } from "react-router-dom";
+import {
+    useEffect,
+    useState
+} from "react";
+
+import {
+    useNavigate,
+    useParams
+} from "react-router-dom";
 
 import "./TrackOrder.css";
+
+import { io } from "socket.io-client";
 
 
 function TrackOrder() {
@@ -9,6 +19,110 @@ function TrackOrder() {
 
     const navigate = useNavigate();
 
+
+    const [order, setOrder] =
+        useState(null);
+
+    const [loading, setLoading] =
+        useState(true);
+
+    const [error, setError] =
+        useState("");
+
+
+    // =====================================================
+    // FETCH ORDER
+    // =====================================================
+
+    useEffect(() => {
+
+        const fetchOrder = async () => {
+
+            try {
+
+                const token =
+                    localStorage.getItem("token");
+
+
+                if (!token) {
+
+                    navigate("/login");
+
+                    return;
+
+                }
+
+
+                const response =
+                    await fetch(
+                        `http://localhost:5000/api/orders/${id}`,
+
+                        {
+                            method: "GET",
+
+                            headers: {
+
+                                Authorization:
+                                    `Bearer ${token}`
+
+                            }
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to fetch order."
+                    );
+
+                }
+
+
+                setOrder(
+                    data.order
+                );
+
+            }
+
+            catch (err) {
+
+                console.error(
+                    "Track order error:",
+                    err
+                );
+
+
+                setError(
+                    err.message ||
+                    "Unable to load order."
+                );
+
+            }
+
+            finally {
+
+                setLoading(false);
+
+            }
+
+        };
+
+
+        fetchOrder();
+
+    }, [id, navigate]);
+
+
+    // =====================================================
+    // LOGOUT
+    // =====================================================
 
     const logout = () => {
 
@@ -20,6 +134,112 @@ function TrackOrder() {
 
     };
 
+
+    // =====================================================
+    // LOADING
+    // =====================================================
+
+    if (loading) {
+
+        return (
+
+            <div className="track-page">
+
+                <div className="track-loading">
+
+                    <i className="fa-solid fa-spinner fa-spin"></i>
+
+                    <p>
+                        Loading your order...
+                    </p>
+
+                </div>
+
+            </div>
+
+        );
+
+    }
+
+
+    // =====================================================
+    // ERROR
+    // =====================================================
+
+    if (error || !order) {
+
+        return (
+
+            <div className="track-page">
+
+                <div className="track-error">
+
+                    <i className="fa-solid fa-circle-exclamation"></i>
+
+                    <h2>
+                        Unable to Load Order
+                    </h2>
+
+                    <p>
+                        {error || "Order not found."}
+                    </p>
+
+                    <button
+                        onClick={() =>
+                            navigate("/dashboard")
+                        }
+                    >
+
+                        <i className="fa-solid fa-arrow-left"></i>
+
+                        Back to Dashboard
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        );
+
+    }
+
+
+    // =====================================================
+    // ORDER STATUS
+    // =====================================================
+
+    const status =
+        order.status;
+
+
+    const isReceived =
+        [
+            "Order Received",
+            "In Kitchen",
+            "Sent to Delivery",
+            "Delivered"
+        ].includes(status);
+
+
+    const isKitchen =
+        [
+            "In Kitchen",
+            "Sent to Delivery",
+            "Delivered"
+        ].includes(status);
+
+
+    const isDelivery =
+        [
+            "Sent to Delivery",
+            "Delivered"
+        ].includes(status);
+
+
+    // =====================================================
+    // RENDER
+    // =====================================================
 
     return (
 
@@ -34,7 +254,9 @@ function TrackOrder() {
 
                 <div
                     className="track-brand"
-                    onClick={() => navigate("/dashboard")}
+                    onClick={() =>
+                        navigate("/dashboard")
+                    }
                 >
 
                     <div className="track-logo">
@@ -61,7 +283,9 @@ function TrackOrder() {
 
                     <button
                         className="dashboard-btn"
-                        onClick={() => navigate("/dashboard")}
+                        onClick={() =>
+                            navigate("/dashboard")
+                        }
                     >
 
                         <i className="fa-solid fa-house"></i>
@@ -136,7 +360,11 @@ function TrackOrder() {
 
 
                         <h2>
-                            #{id}
+                            #
+                            {order._id
+                                .slice(-8)
+                                .toUpperCase()
+                            }
                         </h2>
 
                     </div>
@@ -146,7 +374,7 @@ function TrackOrder() {
 
                         <span></span>
 
-                        Order Received
+                        {status}
 
                     </div>
 
@@ -155,7 +383,7 @@ function TrackOrder() {
 
 
                 {/* ================================================= */}
-                {/* ORDER TRACKER */}
+                {/* TRACKING */}
                 {/* ================================================= */}
 
                 <section className="tracking-card">
@@ -169,7 +397,7 @@ function TrackOrder() {
                             </span>
 
                             <h2>
-                                Your pizza is being prepared
+                                {status}
                             </h2>
 
                         </div>
@@ -188,9 +416,17 @@ function TrackOrder() {
                     <div className="tracking-line">
 
 
-                        {/* STEP 1 */}
+                        {/* ORDER RECEIVED */}
 
-                        <div className="tracking-step completed">
+                        <div
+                            className={
+                                `tracking-step ${
+                                    isReceived
+                                        ? "completed"
+                                        : ""
+                                }`
+                            }
+                        >
 
                             <div className="step-icon">
 
@@ -214,14 +450,29 @@ function TrackOrder() {
                         </div>
 
 
+                        <div
+                            className={
+                                `connector ${
+                                    isKitchen
+                                        ? "active"
+                                        : ""
+                                }`
+                            }
+                        ></div>
 
-                        <div className="connector active"></div>
 
 
+                        {/* IN KITCHEN */}
 
-                        {/* STEP 2 */}
-
-                        <div className="tracking-step current">
+                        <div
+                            className={
+                                `tracking-step ${
+                                    isKitchen
+                                        ? "current"
+                                        : ""
+                                }`
+                            }
+                        >
 
                             <div className="step-icon">
 
@@ -245,14 +496,29 @@ function TrackOrder() {
                         </div>
 
 
+                        <div
+                            className={
+                                `connector ${
+                                    isDelivery
+                                        ? "active"
+                                        : ""
+                                }`
+                            }
+                        ></div>
 
-                        <div className="connector"></div>
 
 
+                        {/* DELIVERY */}
 
-                        {/* STEP 3 */}
-
-                        <div className="tracking-step">
+                        <div
+                            className={
+                                `tracking-step ${
+                                    isDelivery
+                                        ? "completed"
+                                        : ""
+                                }`
+                            }
+                        >
 
                             <div className="step-icon">
 
@@ -283,13 +549,13 @@ function TrackOrder() {
 
 
                 {/* ================================================= */}
-                {/* ORDER DETAILS */}
+                {/* DETAILS */}
                 {/* ================================================= */}
 
                 <div className="track-grid">
 
 
-                    {/* ORDER */}
+                    {/* ORDER DETAILS */}
 
                     <section className="details-card">
 
@@ -304,37 +570,61 @@ function TrackOrder() {
                         </div>
 
 
-                        <div className="pizza-item">
+                        {order.items.map(
+                            (item, index) => (
 
-                            <div className="pizza-item-icon">
+                                <div
+                                    className="pizza-item"
+                                    key={
+                                        item._id ||
+                                        index
+                                    }
+                                >
 
-                                <i className="fa-solid fa-pizza-slice"></i>
+                                    <div className="pizza-item-icon">
 
-                            </div>
+                                        <i className="fa-solid fa-pizza-slice"></i>
 
-
-                            <div className="pizza-item-info">
-
-                                <h3>
-                                    VG Pizza
-                                </h3>
-
-                                <p>
-                                    Custom Pizza
-                                </p>
-
-                                <span>
-                                    Quantity: 1
-                                </span>
-
-                            </div>
+                                    </div>
 
 
-                            <strong>
-                                ₹499.00
-                            </strong>
+                                    <div className="pizza-item-info">
 
-                        </div>
+                                        <h3>
+                                            {item.name}
+                                        </h3>
+
+                                        <p>
+                                            ₹
+                                            {Number(
+                                                item.price
+                                            ).toFixed(2)}
+                                        </p>
+
+                                        <span>
+                                            Quantity:{" "}
+                                            {item.quantity}
+                                        </span>
+
+                                    </div>
+
+
+                                    <strong>
+                                        ₹
+                                        {(
+                                            Number(
+                                                item.price
+                                            ) *
+                                            Number(
+                                                item.quantity
+                                            )
+                                        ).toFixed(2)}
+                                    </strong>
+
+                                </div>
+
+                            )
+                        )}
 
 
                         <div className="price-row">
@@ -344,7 +634,10 @@ function TrackOrder() {
                             </span>
 
                             <strong>
-                                ₹499.00
+                                ₹
+                                {Number(
+                                    order.subtotal
+                                ).toFixed(2)}
                             </strong>
 
                         </div>
@@ -357,7 +650,10 @@ function TrackOrder() {
                             </span>
 
                             <strong>
-                                ₹40.00
+                                ₹
+                                {Number(
+                                    order.deliveryFee
+                                ).toFixed(2)}
                             </strong>
 
                         </div>
@@ -366,11 +662,14 @@ function TrackOrder() {
                         <div className="price-row">
 
                             <span>
-                                GST
+                                Tax
                             </span>
 
                             <strong>
-                                ₹23.90
+                                ₹
+                                {Number(
+                                    order.tax
+                                ).toFixed(2)}
                             </strong>
 
                         </div>
@@ -379,11 +678,14 @@ function TrackOrder() {
                         <div className="total-row">
 
                             <span>
-                                Total Paid
+                                Total
                             </span>
 
                             <strong>
-                                ₹562.90
+                                ₹
+                                {Number(
+                                    order.total
+                                ).toFixed(2)}
                             </strong>
 
                         </div>
@@ -392,7 +694,7 @@ function TrackOrder() {
 
 
 
-                    {/* DELIVERY */}
+                    {/* DELIVERY DETAILS */}
 
                     <section className="details-card">
 
@@ -409,15 +711,22 @@ function TrackOrder() {
 
                         <div className="delivery-info">
 
+
                             <div>
 
                                 <span>
+
                                     <i className="fa-solid fa-user"></i>
+
                                     Customer
+
                                 </span>
 
+
                                 <strong>
-                                    Your Name
+                                    {order.customer?.name ||
+                                        "Not available"
+                                    }
                                 </strong>
 
                             </div>
@@ -426,12 +735,18 @@ function TrackOrder() {
                             <div>
 
                                 <span>
+
                                     <i className="fa-solid fa-phone"></i>
+
                                     Phone
+
                                 </span>
 
+
                                 <strong>
-                                    Your Phone
+                                    {order.customer?.phone ||
+                                        "Not available"
+                                    }
                                 </strong>
 
                             </div>
@@ -440,12 +755,32 @@ function TrackOrder() {
                             <div>
 
                                 <span>
+
                                     <i className="fa-solid fa-location-dot"></i>
+
                                     Delivery Address
+
                                 </span>
 
+
                                 <strong>
-                                    Your delivery address
+
+                                    {order.deliveryAddress?.address}
+
+                                    <br />
+
+                                    {order.deliveryAddress?.city}
+
+                                    {" - "}
+
+                                    {order.deliveryAddress?.pincode}
+
+                                    {
+                                        order.deliveryAddress?.landmark
+                                            ? ` • ${order.deliveryAddress.landmark}`
+                                            : ""
+                                    }
+
                                 </strong>
 
                             </div>
@@ -460,14 +795,56 @@ function TrackOrder() {
 
 
                 {/* ================================================= */}
-                {/* BUTTONS */}
+                {/* PAYMENT */}
+                {/* ================================================= */}
+
+                <section className="details-card payment-card">
+
+                    <div className="details-title">
+
+                        <i className="fa-solid fa-credit-card"></i>
+
+                        <h2>
+                            Payment
+                        </h2>
+
+                    </div>
+
+
+                    <div className="payment-row">
+
+                        <span>
+                            Payment Status
+                        </span>
+
+
+                        <strong
+                            className={
+                                order.paymentStatus === "Paid"
+                                    ? "payment-paid"
+                                    : ""
+                            }
+                        >
+                            {order.paymentStatus}
+                        </strong>
+
+                    </div>
+
+                </section>
+
+
+
+                {/* ================================================= */}
+                {/* ACTIONS */}
                 {/* ================================================= */}
 
                 <div className="track-actions">
 
                     <button
                         className="back-btn"
-                        onClick={() => navigate("/dashboard")}
+                        onClick={() =>
+                            navigate("/dashboard")
+                        }
                     >
 
                         <i className="fa-solid fa-arrow-left"></i>
@@ -479,7 +856,9 @@ function TrackOrder() {
 
                     <button
                         className="order-more-btn"
-                        onClick={() => navigate("/pizzas")}
+                        onClick={() =>
+                            navigate("/menu")
+                        }
                     >
 
                         Order More

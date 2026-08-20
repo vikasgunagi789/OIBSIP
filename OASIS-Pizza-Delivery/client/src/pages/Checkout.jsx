@@ -11,6 +11,9 @@ function Checkout() {
 
     const [cart, setCart] = useState([]);
 
+    const [paymentLoading, setPaymentLoading] =
+    useState(false);
+
 
     const [formData, setFormData] = useState({
 
@@ -246,60 +249,76 @@ function Checkout() {
     }
 
 
-    const orderData = {
-
-        items: cart.map(
-            (item) => ({
-
-                pizza: item._id,
-
-                name: item.name,
-
-                quantity: item.quantity,
-
-                price: item.price
-
-            })
-        ),
-
-
-        customer: {
-
-            name: formData.name,
-
-            phone: formData.phone
-
-        },
-
-
-        deliveryAddress: {
-
-            address: formData.address,
-
-            city: formData.city,
-
-            pincode: formData.pincode,
-
-            landmark:
-                formData.landmark
-
-        },
-
-
-        subtotal,
-
-        deliveryFee,
-
-        tax,
-
-        total
-
-    };
-
-
     try {
 
-        const response =
+        setPaymentLoading(true);
+
+
+        // =================================================
+        // STEP 1 — CREATE OUR ORDER
+        // =================================================
+
+        const orderData = {
+
+            items: cart.map(
+                (item) => ({
+
+                    pizza:
+                        item._id,
+
+                    name:
+                        item.name,
+
+                    quantity:
+                        item.quantity,
+
+                    price:
+                        item.price
+
+                })
+            ),
+
+
+            customer: {
+
+                name:
+                    formData.name,
+
+                phone:
+                    formData.phone
+
+            },
+
+
+            deliveryAddress: {
+
+                address:
+                    formData.address,
+
+                city:
+                    formData.city,
+
+                pincode:
+                    formData.pincode,
+
+                landmark:
+                    formData.landmark
+
+            },
+
+
+            subtotal,
+
+            deliveryFee,
+
+            tax,
+
+            total
+
+        };
+
+
+        const orderResponse =
             await fetch(
                 "http://localhost:5000/api/orders",
                 {
@@ -323,67 +342,320 @@ function Checkout() {
             );
 
 
-        const data =
-            await response.json();
+        const orderDataResponse =
+            await orderResponse.json();
 
 
-        if (!response.ok) {
+        if (!orderResponse.ok) {
 
-            alert(
-                data.message ||
-                "Failed to place order."
+            throw new Error(
+                orderDataResponse.message ||
+                "Failed to create order."
             );
-
-            return;
 
         }
 
 
-        console.log(
-            "VG PIZZA ORDER:",
-            data.order
-        );
+        const createdOrder =
+            orderDataResponse.order;
 
 
-        localStorage.removeItem(
-            "cart"
-        );
+        // =================================================
+        // STEP 2 — CREATE RAZORPAY ORDER
+        // =================================================
 
+        const razorpayResponse =
+            await fetch(
+                "http://localhost:5000/api/payments/create-order",
+                {
 
-        localStorage.setItem(
+                    method: "POST",
 
-            "latestOrder",
+                    headers: {
 
-            JSON.stringify(
-                data.order
-            )
+                        "Content-Type":
+                            "application/json",
 
-        );
+                        Authorization:
+                            `Bearer ${token}`
 
+                    },
 
-        navigate(
-            "/order-success",
-            {
-                state: {
-                    order:
-                        data.order
+                    body: JSON.stringify({
+
+                        orderId:
+                            createdOrder._id
+
+                    })
+
                 }
+            );
+
+
+        const razorpayData =
+            await razorpayResponse.json();
+
+
+        if (!razorpayResponse.ok) {
+
+            throw new Error(
+                razorpayData.message ||
+                "Unable to start payment."
+            );
+
+        }
+
+
+        // =================================================
+        // STEP 3 — OPEN RAZORPAY CHECKOUT
+        // =================================================
+
+        if (
+            !window.Razorpay
+        ) {
+
+            throw new Error(
+                "Razorpay Checkout failed to load. Refresh the page and try again."
+            );
+
+        }
+
+
+        const options = {
+
+            key:
+                razorpayData.keyId,
+
+            amount:
+                razorpayData.amount,
+
+            currency:
+                razorpayData.currency,
+
+            name:
+                "VG PIZZA",
+
+            description:
+                `Pizza Order #${createdOrder._id
+                    .slice(-8)
+                    .toUpperCase()}`,
+
+            order_id:
+                razorpayData.razorpayOrderId,
+
+
+            prefill: {
+
+                name:
+                    formData.name,
+
+                contact:
+                    formData.phone
+
+            },
+
+
+            theme: {
+
+                color:
+                    "#e53935"
+
+            },
+
+
+            handler:
+                async function (
+                    paymentResponse
+                ) {
+
+                    try {
+
+                        // =================================
+                        // STEP 4 — VERIFY PAYMENT
+                        // =================================
+
+                        const verifyResponse =
+                            await fetch(
+                                "http://localhost:5000/api/payments/verify",
+                                {
+
+                                    method: "POST",
+
+                                    headers: {
+
+                                        "Content-Type":
+                                            "application/json",
+
+                                        Authorization:
+                                            `Bearer ${token}`
+
+                                    },
+
+                                    body:
+                                        JSON.stringify({
+
+                                            orderId:
+                                                createdOrder._id,
+
+                                            razorpay_order_id:
+                                                paymentResponse
+                                                    .razorpay_order_id,
+
+                                            razorpay_payment_id:
+                                                paymentResponse
+                                                    .razorpay_payment_id,
+
+                                            razorpay_signature:
+                                                paymentResponse
+                                                    .razorpay_signature
+
+                                        })
+
+                                }
+                            );
+
+
+                        const verifyData =
+                            await verifyResponse.json();
+
+
+                        if (!verifyResponse.ok) {
+
+                            throw new Error(
+                                verifyData.message ||
+                                "Payment verification failed."
+                            );
+
+                        }
+
+
+                        // =============================
+                        // PAYMENT SUCCESS
+                        // =============================
+
+                        const paidOrder =
+                            verifyData.order;
+
+
+                        localStorage.removeItem(
+                            "cart"
+                        );
+
+
+                        localStorage.setItem(
+
+                            "latestOrder",
+
+                            JSON.stringify(
+                                paidOrder
+                            )
+
+                        );
+
+
+                        navigate(
+                            "/order-success",
+                            {
+                                state: {
+
+                                    order:
+                                        paidOrder
+
+                                }
+
+                            }
+                        );
+
+                    }
+
+                    catch (error) {
+
+                        console.error(
+                            "Payment verification error:",
+                            error
+                        );
+
+
+                        alert(
+                            error.message
+                        );
+
+                    }
+
+                    finally {
+
+                        setPaymentLoading(false);
+
+                    }
+
+                },
+
+
+            modal: {
+
+                ondismiss:
+                    function () {
+
+                        setPaymentLoading(
+                            false
+                        );
+
+                    }
+
             }
 
+        };
+
+
+        const paymentWindow =
+            new window.Razorpay(
+                options
+            );
+
+
+        paymentWindow.on(
+            "payment.failed",
+            function (response) {
+
+                console.error(
+                    "Razorpay payment failed:",
+                    response
+                );
+
+
+                alert(
+                    "Payment failed. Please try again."
+                );
+
+
+                setPaymentLoading(
+                    false
+                );
+
+            }
         );
+
+
+        paymentWindow.open();
 
     }
 
     catch (error) {
 
         console.error(
-            "Order error:",
+            "Checkout error:",
             error
         );
 
 
         alert(
-            "Unable to connect to server."
+            error.message ||
+            "Something went wrong while placing your order."
+        );
+
+
+        setPaymentLoading(
+            false
         );
 
     }
@@ -984,11 +1256,31 @@ function Checkout() {
                             onClick={
                                 handlePlaceOrder
                             }
+                            disabled={
+                                paymentLoading
+                            }
                         >
 
-                            Place Order
+                            {paymentLoading ? (
 
-                            <i className="fa-solid fa-arrow-right"></i>
+    <>
+        <i className="fa-solid fa-spinner fa-spin"></i>
+
+        Opening Payment...
+
+    </>
+
+) : (
+
+    <>
+        Pay ₹{total.toFixed(2)}
+
+        <i className="fa-solid fa-arrow-right"></i>
+    </>
+
+)}
+
+                            {/* <i className="fa-solid fa-arrow-right"></i> */}
 
                         </button>
 

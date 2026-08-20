@@ -1,0 +1,419 @@
+.admin-login-page {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 25px;
+
+    background:
+        #f7f5f1;
+
+}
+
+
+.admin-login-card {
+
+    width: 100%;
+
+    max-width: 430px;
+
+    background: #ffffff;
+
+    border: 1px solid #e6e1da;
+
+    border-radius: 24px;
+
+    padding: 40px;
+
+    box-shadow:
+        0 20px 60px
+        rgba(0, 0, 0, 0.08);
+
+}
+
+
+/* BRAND */
+
+.admin-brand {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    margin-bottom: 35px;
+
+}
+
+
+.admin-logo {
+
+    width: 48px;
+
+    height: 48px;
+
+    border-radius: 14px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #e53935;
+
+    color: #ffffff;
+
+    font-size: 18px;
+
+    font-weight: 900;
+
+}
+
+
+.admin-brand-text {
+
+    display: flex;
+
+    flex-direction: column;
+
+    line-height: 1;
+
+}
+
+
+.admin-brand-text span {
+
+    color: #e53935;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+}
+
+
+.admin-brand-text strong {
+
+    font-size: 22px;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* HEADING */
+
+.admin-heading {
+
+    text-align: center;
+
+    margin-bottom: 25px;
+
+}
+
+
+.admin-label {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    color: #e53935;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.admin-heading h1 {
+
+    margin: 0;
+
+    font-size: 30px;
+
+}
+
+
+.admin-heading p {
+
+    margin: 8px 0 0;
+
+    color: #777;
+
+    font-size: 13px;
+
+}
+
+
+/* ERROR */
+
+.admin-error {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 12px 14px;
+
+    margin-bottom: 18px;
+
+    border-radius: 10px;
+
+    background: #fff0ef;
+
+    color: #c62828;
+
+    font-size: 12px;
+
+}
+
+
+/* FORM */
+
+.admin-login-form {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+
+}
+
+
+.admin-input-group {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+}
+
+
+.admin-input-group label {
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    color: #333;
+
+}
+
+
+.admin-input-wrapper {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    border: 1px solid #ddd8d0;
+
+    border-radius: 11px;
+
+    padding: 0 13px;
+
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+
+}
+
+
+.admin-input-wrapper:focus-within {
+
+    border-color: #e53935;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(229, 57, 53, 0.08);
+
+}
+
+
+.admin-input-wrapper i {
+
+    color: #999;
+
+    font-size: 13px;
+
+}
+
+
+.admin-input-wrapper input {
+
+    width: 100%;
+
+    border: none;
+
+    outline: none;
+
+    padding: 13px 0;
+
+    background: transparent;
+
+    font-size: 13px;
+
+}
+
+
+/* BUTTON */
+
+.admin-login-button {
+
+    border: none;
+
+    border-radius: 11px;
+
+    padding: 14px;
+
+    background: #e53935;
+
+    color: #ffffff;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    transition:
+        transform 0.2s,
+        background 0.2s;
+
+}
+
+
+.admin-login-button:hover {
+
+    background: #c62828;
+
+    transform: translateY(-1px);
+
+}
+
+
+.admin-login-button:disabled {
+
+    opacity: 0.7;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+}
+
+
+/* BACK BUTTON */
+
+.back-user-login {
+
+    width: 100%;
+
+    margin-top: 20px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #555;
+
+    font-size: 12px;
+
+    cursor: pointer;
+
+}
+
+
+.back-user-login:hover {
+
+    color: #e53935;
+
+}
+
+
+/* SECURITY */
+
+.admin-security {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    margin-top: 25px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid #eee;
+
+    color: #999;
+
+    font-size: 10px;
+
+}
+
+
+/* MOBILE */
+
+@media (max-width: 500px) {
+
+    .admin-login-page {
+
+        padding: 15px;
+
+    }
+
+
+    .admin-login-card {
+
+        padding: 30px 20px;
+
+        border-radius: 20px;
+
+    }
+
+
+    .admin-heading h1 {
+
+        font-size: 26px;
+
+    }
+
+}

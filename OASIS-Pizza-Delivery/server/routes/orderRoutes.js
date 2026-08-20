@@ -2,51 +2,42 @@ const express = require("express");
 
 const router = express.Router();
 
-const Order =
-    require("../models/Order");
+const Order = require("../models/Order");
 
 const authMiddleware =
     require("../middleware/authMiddleware");
 
 
-/*
-=====================================================
-CREATE ORDER
-POST /api/orders
-=====================================================
-*/
+// =====================================================
+// CREATE ORDER
+// POST /api/orders
+// =====================================================
 
 router.post(
-
     "/",
-
     authMiddleware,
-
     async (req, res) => {
 
         try {
 
             const {
-
                 items,
-
                 customer,
-
                 deliveryAddress,
-
                 subtotal,
-
                 deliveryFee,
-
                 tax,
-
                 total
-
             } = req.body;
 
 
+            // ---------------------------------------------
+            // CHECK CART
+            // ---------------------------------------------
+
             if (
                 !items ||
+                !Array.isArray(items) ||
                 items.length === 0
             ) {
 
@@ -60,10 +51,31 @@ router.post(
             }
 
 
+            // ---------------------------------------------
+            // CHECK USER
+            // ---------------------------------------------
+
+            if (!req.user || !req.user._id) {
+
+                return res.status(401).json({
+
+                    message:
+                        "User authentication failed."
+
+                });
+
+            }
+
+
+            // ---------------------------------------------
+            // CREATE ORDER
+            // ---------------------------------------------
+
             const order =
                 await Order.create({
 
-                    user: req.user._id,
+                    user:
+                        req.user._id,
 
                     items,
 
@@ -82,7 +94,13 @@ router.post(
                 });
 
 
+            // ---------------------------------------------
+            // RESPONSE
+            // ---------------------------------------------
+
             res.status(201).json({
+
+                success: true,
 
                 message:
                     "Order created successfully.",
@@ -103,6 +121,8 @@ router.post(
 
             res.status(500).json({
 
+                success: false,
+
                 message:
                     "Failed to create order."
 
@@ -111,13 +131,73 @@ router.post(
         }
 
     }
-
 );
 
-module.exports = router;
+
+// =====================================================
+// GET MY ORDERS
+// GET /api/orders/my-orders
+// =====================================================
+
+router.get(
+    "/my-orders",
+    authMiddleware,
+    async (req, res) => {
+
+        try {
+
+            const orders =
+                await Order.find({
+
+                    user:
+                        req.user._id
+
+                })
+                .populate(
+                    "items.pizza",
+                    "name price image"
+                )
+                .sort({
+                    createdAt: -1
+                });
+
+
+            res.json({
+
+                success: true,
+
+                orders
+
+            });
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Get my orders error:",
+                error
+            );
+
+
+            res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Failed to fetch orders."
+
+            });
+
+        }
+
+    }
+);
+
 
 // =====================================================
 // GET SINGLE ORDER
+// GET /api/orders/:id
 // =====================================================
 
 router.get(
@@ -128,16 +208,34 @@ router.get(
         try {
 
             const order =
-                await Order.findById(req.params.id)
-                    .populate(
-                        "user",
-                        "name email"
-                    );
+                await Order.findOne({
 
+                    _id:
+                        req.params.id,
+
+                    user:
+                        req.user._id
+
+                })
+                .populate(
+                    "user",
+                    "name email"
+                )
+                .populate(
+                    "items.pizza",
+                    "name price image"
+                );
+
+
+            // ---------------------------------------------
+            // ORDER NOT FOUND
+            // ---------------------------------------------
 
             if (!order) {
 
                 return res.status(404).json({
+
+                    success: false,
 
                     message:
                         "Order not found."
@@ -147,23 +245,9 @@ router.get(
             }
 
 
-            // Make sure the user can only
-            // view their own order
-
-            if (
-                order.user._id.toString() !==
-                req.user._id.toString()
-            ) {
-
-                return res.status(403).json({
-
-                    message:
-                        "You are not authorized to view this order."
-
-                });
-
-            }
-
+            // ---------------------------------------------
+            // SUCCESS
+            // ---------------------------------------------
 
             res.json({
 
@@ -185,128 +269,7 @@ router.get(
 
             res.status(500).json({
 
-                message:
-                    "Failed to fetch order."
-
-            });
-
-        }
-
-    }
-);
-
-
-/*
-=====================================================
-GET MY ORDERS
-GET /api/orders/my-orders
-=====================================================
-*/
-
-router.get(
-
-    "/my-orders",
-
-    authMiddleware,
-
-    async (req, res) => {
-
-        try {
-
-            const orders =
-                await Order.find({
-
-                    user:
-                        req.user._id
-
-                })
-                .sort({
-                    createdAt: -1
-                });
-
-
-            res.json({
-
-                orders
-
-            });
-
-        }
-
-        catch (error) {
-
-            console.error(error);
-
-
-            res.status(500).json({
-
-                message:
-                    "Failed to fetch orders."
-
-            });
-
-        }
-
-    }
-
-);
-
-
-/*
-=====================================================
-GET SINGLE ORDER
-GET /api/orders/:id
-=====================================================
-*/
-
-router.get(
-
-    "/:id",
-
-    authMiddleware,
-
-    async (req, res) => {
-
-        try {
-
-            const order =
-                await Order.findOne({
-
-                    _id:
-                        req.params.id,
-
-                    user:
-                        req.user._id
-
-                });
-
-
-            if (!order) {
-
-                return res.status(404).json({
-
-                    message:
-                        "Order not found."
-
-                });
-
-            }
-
-
-            res.json({
-
-                order
-
-            });
-
-        }
-
-        catch (error) {
-
-            console.error(error);
-
-
-            res.status(500).json({
+                success: false,
 
                 message:
                     "Failed to fetch order."
@@ -316,8 +279,11 @@ router.get(
         }
 
     }
-
 );
 
+
+// =====================================================
+// EXPORT ROUTER
+// =====================================================
 
 module.exports = router;
