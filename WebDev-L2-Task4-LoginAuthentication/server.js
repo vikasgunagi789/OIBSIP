@@ -6,7 +6,7 @@ const path = require("path");
 
 const app = express();
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 const usersFile =
     path.join(__dirname, "users.json");
@@ -22,22 +22,35 @@ app.use(express.urlencoded({
     extended: true
 }));
 
-app.use(express.static(
-    path.join(__dirname, "public")
-));
 
+// =====================================
+// SESSION
+// =====================================
 
 app.use(
     session({
-        secret: "oibship-task4-secret-key",
+
+        secret:
+            process.env.SESSION_SECRET ||
+            "development-secret",
 
         resave: false,
 
         saveUninitialized: false,
 
         cookie: {
-            maxAge: 1000 * 60 * 60
+
+            maxAge:
+                1000 * 60 * 60,
+
+            httpOnly: true,
+
+            secure:
+                process.env.NODE_ENV ===
+                "production"
+
         }
+
     })
 );
 
@@ -440,6 +453,44 @@ app.post(
     }
 );
 
+app.use(express.json());
+
+app.use(express.urlencoded({
+    extended: true
+}));
+
+
+// =====================================
+// SESSION
+// =====================================
+
+app.use(
+    session({
+
+        secret:
+            process.env.SESSION_SECRET ||
+            "development-secret",
+
+        resave: false,
+
+        saveUninitialized: false,
+
+        cookie: {
+
+            maxAge:
+                1000 * 60 * 60,
+
+            httpOnly: true,
+
+            secure:
+                process.env.NODE_ENV ===
+                "production"
+
+        }
+
+    })
+);
+
 
 // ================================
 // PROTECTED DASHBOARD PAGE
@@ -470,11 +521,10 @@ app.get(
 
 app.listen(
     PORT,
+    "0.0.0.0",
     () => {
-
         console.log(
-            `Server running at http://localhost:${PORT}`
+            `Server running on port ${PORT}`
         );
-
     }
 );

@@ -400,459 +400,322 @@
 
     <script>
 
+const registerForm =
+    document.getElementById("registerForm");
 
-        /* =================================================
-           ELEMENTS
-        ================================================= */
+const usernameInput =
+    document.getElementById("username");
 
-        const registerForm =
-            document.getElementById(
-                "registerForm"
+const emailInput =
+    document.getElementById("email");
+
+const passwordInput =
+    document.getElementById("password");
+
+const confirmPasswordInput =
+    document.getElementById("confirmPassword");
+
+const registerMessage =
+    document.getElementById("registerMessage");
+
+const togglePassword =
+    document.getElementById("togglePassword");
+
+
+// =====================================
+// SHOW / HIDE PASSWORD
+// =====================================
+
+togglePassword.addEventListener(
+    "click",
+    function () {
+
+        if (passwordInput.type === "password") {
+
+            passwordInput.type = "text";
+
+            togglePassword.setAttribute(
+                "aria-label",
+                "Hide password"
             );
 
-        const usernameInput =
-            document.getElementById(
-                "username"
+        } else {
+
+            passwordInput.type = "password";
+
+            togglePassword.setAttribute(
+                "aria-label",
+                "Show password"
             );
 
-        const emailInput =
+        }
+
+    }
+);
+
+
+// =====================================
+// PASSWORD REQUIREMENTS
+// =====================================
+
+passwordInput.addEventListener(
+    "input",
+    function () {
+
+        const password =
+            passwordInput.value;
+
+        const lengthRequirement =
             document.getElementById(
-                "email"
+                "lengthRequirement"
             );
 
-        const passwordInput =
+        const numberRequirement =
             document.getElementById(
-                "password"
-            );
-
-        const confirmPasswordInput =
-            document.getElementById(
-                "confirmPassword"
-            );
-
-        const registerMessage =
-            document.getElementById(
-                "registerMessage"
-            );
-
-        const togglePassword =
-            document.getElementById(
-                "togglePassword"
+                "numberRequirement"
             );
 
 
+        if (password.length >= 8) {
 
-        /* =================================================
-           SHA-256 PASSWORD HASHING
-        ================================================= */
+            lengthRequirement.classList.add(
+                "valid"
+            );
 
-        async function hashPassword(password) {
+        } else {
 
-            const encoder =
-                new TextEncoder();
+            lengthRequirement.classList.remove(
+                "valid"
+            );
+
+        }
+
+
+        if (/\d/.test(password)) {
+
+            numberRequirement.classList.add(
+                "valid"
+            );
+
+        } else {
+
+            numberRequirement.classList.remove(
+                "valid"
+            );
+
+        }
+
+    }
+);
+
+
+// =====================================
+// REGISTER
+// =====================================
+
+registerForm.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+        registerMessage.textContent = "";
+
+        registerMessage.className =
+            "auth-message";
+
+
+        const username =
+            usernameInput.value.trim();
+
+        const email =
+            emailInput.value
+                .trim()
+                .toLowerCase();
+
+        const password =
+            passwordInput.value;
+
+        const confirmPassword =
+            confirmPasswordInput.value;
+
+
+        // =================================
+        // VALIDATION
+        // =================================
+
+        if (
+            !username ||
+            !email ||
+            !password ||
+            !confirmPassword
+        ) {
+
+            showError(
+                "Please fill in all fields."
+            );
+
+            return;
+        }
+
+
+        if (username.length < 3) {
+
+            showError(
+                "Username must contain at least 3 characters."
+            );
+
+            return;
+        }
+
+
+        const emailPattern =
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailPattern.test(email)) {
+
+            showError(
+                "Please enter a valid email address."
+            );
+
+            return;
+        }
+
+
+        if (password.length < 8) {
+
+            showError(
+                "Password must contain at least 8 characters."
+            );
+
+            return;
+        }
+
+
+        if (!/\d/.test(password)) {
+
+            showError(
+                "Password must contain at least 1 number."
+            );
+
+            return;
+        }
+
+
+        if (password !== confirmPassword) {
+
+            showError(
+                "Passwords do not match."
+            );
+
+            return;
+        }
+
+
+        // =================================
+        // SEND TO NODE SERVER
+        // =================================
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/register",
+                    {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        credentials: "include",
+
+                        body: JSON.stringify({
+
+                            username: username,
+
+                            email: email,
+
+                            password: password
+
+                        })
+
+                    }
+                );
+
 
             const data =
-                encoder.encode(password);
+                await response.json();
 
-            const hashBuffer =
-                await crypto.subtle.digest(
-                    "SHA-256",
-                    data
+
+            // =================================
+            // REGISTRATION FAILED
+            // =================================
+
+            if (!response.ok || !data.success) {
+
+                showError(
+                    data.message ||
+                    "Registration failed."
                 );
 
-            const hashArray =
-                Array.from(
-                    new Uint8Array(hashBuffer)
-                );
-
-            return hashArray
-                .map(
-                    byte =>
-                        byte
-                            .toString(16)
-                            .padStart(2, "0")
-                )
-                .join("");
-
-        }
-
-
-
-        /* =================================================
-           SHOW / HIDE PASSWORD
-        ================================================= */
-
-        togglePassword.addEventListener(
-            "click",
-            function () {
-
-                if (
-                    passwordInput.type ===
-                    "password"
-                ) {
-
-                    passwordInput.type =
-                        "text";
-
-                    togglePassword.setAttribute(
-                        "aria-label",
-                        "Hide password"
-                    );
-
-                } else {
-
-                    passwordInput.type =
-                        "password";
-
-                    togglePassword.setAttribute(
-                        "aria-label",
-                        "Show password"
-                    );
-
-                }
-
+                return;
             }
-        );
 
 
-
-        /* =================================================
-           PASSWORD REQUIREMENTS
-        ================================================= */
-
-        passwordInput.addEventListener(
-            "input",
-            function () {
-
-                const password =
-                    passwordInput.value;
-
-
-                const lengthRequirement =
-                    document.getElementById(
-                        "lengthRequirement"
-                    );
-
-                const numberRequirement =
-                    document.getElementById(
-                        "numberRequirement"
-                    );
-
-
-                /* 8 characters */
-
-                if (password.length >= 8) {
-
-                    lengthRequirement.classList.add(
-                        "valid"
-                    );
-
-                } else {
-
-                    lengthRequirement.classList.remove(
-                        "valid"
-                    );
-
-                }
-
-
-                /* At least one number */
-
-                if (/\d/.test(password)) {
-
-                    numberRequirement.classList.add(
-                        "valid"
-                    );
-
-                } else {
-
-                    numberRequirement.classList.remove(
-                        "valid"
-                    );
-
-                }
-
-            }
-        );
-
-
-
-        /* =================================================
-           REGISTRATION
-        ================================================= */
-
-        registerForm.addEventListener(
-            "submit",
-            async function (event) {
-
-                event.preventDefault();
-
-
-                registerMessage.textContent = "";
-
-                registerMessage.className =
-                    "auth-message";
-
-
-
-                /* -----------------------------------------
-                   GET VALUES
-                ----------------------------------------- */
-
-                const username =
-                    usernameInput.value.trim();
-
-                const email =
-                    emailInput.value
-                        .trim()
-                        .toLowerCase();
-
-                const password =
-                    passwordInput.value;
-
-                const confirmPassword =
-                    confirmPasswordInput.value;
-
-
-
-                /* -----------------------------------------
-                   EMPTY CHECK
-                ----------------------------------------- */
-
-                if (
-                    username === "" ||
-                    email === "" ||
-                    password === "" ||
-                    confirmPassword === ""
-                ) {
-
-                    showError(
-                        "Please fill in all fields."
-                    );
-
-                    return;
-
-                }
-
-
-
-                /* -----------------------------------------
-                   USERNAME VALIDATION
-                ----------------------------------------- */
-
-                if (username.length < 3) {
-
-                    showError(
-                        "Username must contain at least 3 characters."
-                    );
-
-                    return;
-
-                }
-
-
-
-                /* -----------------------------------------
-                   EMAIL VALIDATION
-                ----------------------------------------- */
-
-                const emailPattern =
-                    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-
-                if (
-                    !emailPattern.test(email)
-                ) {
-
-                    showError(
-                        "Please enter a valid email address."
-                    );
-
-                    return;
-
-                }
-
-
-
-                /* -----------------------------------------
-                   PASSWORD LENGTH
-                ----------------------------------------- */
-
-                if (password.length < 8) {
-
-                    showError(
-                        "Password must contain at least 8 characters."
-                    );
-
-                    return;
-
-                }
-
-
-
-                /* -----------------------------------------
-                   PASSWORD NUMBER
-                ----------------------------------------- */
-
-                if (!/\d/.test(password)) {
-
-                    showError(
-                        "Password must contain at least 1 number."
-                    );
-
-                    return;
-
-                }
-
-
-
-                /* -----------------------------------------
-                   CONFIRM PASSWORD
-                ----------------------------------------- */
-
-                if (
-                    password !==
-                    confirmPassword
-                ) {
-
-                    showError(
-                        "Passwords do not match."
-                    );
-
-                    return;
-
-                }
-
-
-
-                /* -----------------------------------------
-                   GET EXISTING USERS
-                ----------------------------------------- */
-
-                const users =
-                    JSON.parse(
-                        localStorage.getItem(
-                            "taskflowUsers"
-                        )
-                    ) || [];
-
-
-
-                /* -----------------------------------------
-                   DUPLICATE EMAIL
-                ----------------------------------------- */
-
-                const existingUser =
-                    users.find(
-                        user =>
-                            user.email === email
-                    );
-
-
-                if (existingUser) {
-
-                    showError(
-                        "An account with this email already exists."
-                    );
-
-                    return;
-
-                }
-
-
-
-                /* -----------------------------------------
-                   HASH PASSWORD
-                ----------------------------------------- */
-
-                const hashedPassword =
-                    await hashPassword(
-                        password
-                    );
-
-
-
-                /* -----------------------------------------
-                   CREATE USER
-                ----------------------------------------- */
-
-                const newUser = {
-
-                    username:
-                        username,
-
-                    email:
-                        email,
-
-                    password:
-                        hashedPassword
-
-                };
-
-
-
-                /* -----------------------------------------
-                   SAVE USER
-                ----------------------------------------- */
-
-                users.push(
-                    newUser
-                );
-
-
-                localStorage.setItem(
-                    "taskflowUsers",
-                    JSON.stringify(users)
-                );
-
-
-
-                /* -----------------------------------------
-                   SUCCESS
-                ----------------------------------------- */
-
-                registerMessage.textContent =
-                    "Account created successfully. Redirecting to login...";
-
-                registerMessage.className =
-                    "auth-message success-message";
-
-
-
-                /* -----------------------------------------
-                   REDIRECT
-                ----------------------------------------- */
-
-                setTimeout(
-                    function () {
-
-                        window.location.href =
-                            "login.html";
-
-                    },
-                    1200
-                );
-
-            }
-        );
-
-
-
-        /* =================================================
-           ERROR FUNCTION
-        ================================================= */
-
-        function showError(message) {
+            // =================================
+            // SUCCESS
+            // =================================
 
             registerMessage.textContent =
-                message;
+                "Account created successfully. Redirecting to login...";
 
             registerMessage.className =
-                "auth-message error-message";
+                "auth-message success-message";
+
+
+            setTimeout(
+                function () {
+
+                    window.location.href =
+                        "login.html";
+
+                },
+                1200
+            );
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            showError(
+                "Unable to connect to the server."
+            );
 
         }
 
-    </script>
+    }
+);
+
+
+// =====================================
+// ERROR FUNCTION
+// =====================================
+
+function showError(message) {
+
+    registerMessage.textContent =
+        message;
+
+    registerMessage.className =
+        "auth-message error-message";
+
+}
+
+</script>
 
 
 </body>

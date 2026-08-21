@@ -278,249 +278,156 @@
 
     <script>
 
-        /* =====================================================
-           ELEMENTS
-        ===================================================== */
+const loginForm = document.getElementById("loginForm");
+const loginEmail = document.getElementById("loginEmail");
+const loginPassword = document.getElementById("loginPassword");
+const loginError = document.getElementById("loginError");
 
-        const loginForm =
-            document.getElementById("loginForm");
-
-        const loginEmail =
-            document.getElementById("loginEmail");
-
-        const loginPassword =
-            document.getElementById("loginPassword");
-
-        const loginError =
-            document.getElementById("loginError");
-
-        const togglePassword =
-            document.getElementById("togglePassword");
+const togglePassword =
+    document.getElementById("togglePassword");
 
 
+// ===============================
+// SHOW / HIDE PASSWORD
+// ===============================
 
-        /* =====================================================
-           SHA-256 HASH
-        ===================================================== */
+togglePassword.addEventListener(
+    "click",
+    function () {
 
-        async function hashPassword(password) {
+        if (loginPassword.type === "password") {
 
-            const encoder =
-                new TextEncoder();
+            loginPassword.type = "text";
 
-            const data =
-                encoder.encode(password);
+            togglePassword.setAttribute(
+                "aria-label",
+                "Hide password"
+            );
 
-            const hashBuffer =
-                await crypto.subtle.digest(
-                    "SHA-256",
-                    data
-                );
+        } else {
 
-            const hashArray =
-                Array.from(
-                    new Uint8Array(hashBuffer)
-                );
+            loginPassword.type = "password";
 
-            return hashArray
-                .map(
-                    byte =>
-                        byte
-                            .toString(16)
-                            .padStart(2, "0")
-                )
-                .join("");
+            togglePassword.setAttribute(
+                "aria-label",
+                "Show password"
+            );
 
         }
 
+    }
+);
 
 
-        /* =====================================================
-           SHOW PASSWORD
-        ===================================================== */
+// ===============================
+// LOGIN
+// ===============================
 
-        togglePassword.addEventListener(
-            "click",
-            function () {
+loginForm.addEventListener(
+    "submit",
+    async function (event) {
 
-                if (
-                    loginPassword.type ===
-                    "password"
-                ) {
+        event.preventDefault();
 
-                    loginPassword.type =
-                        "text";
+        loginError.textContent = "";
 
-                } else {
+        const email =
+            loginEmail.value.trim().toLowerCase();
 
-                    loginPassword.type =
-                        "password";
+        const password =
+            loginPassword.value;
 
-                }
 
+        // ===========================
+        // VALIDATION
+        // ===========================
+
+        if (!email || !password) {
+
+            loginError.textContent =
+                "Please enter your email and password.";
+
+            return;
+        }
+
+
+        if (
+            !email.includes("@") ||
+            !email.includes(".")
+        ) {
+
+            loginError.textContent =
+                "Please enter a valid email address.";
+
+            return;
+        }
+
+
+        try {
+
+            // ===========================
+            // SEND LOGIN TO SERVER
+            // ===========================
+
+            const response =
+                await fetch("/api/login", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    credentials: "include",
+
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+
+                });
+
+
+            const data =
+                await response.json();
+
+
+            // ===========================
+            // LOGIN FAILED
+            // ===========================
+
+            if (!response.ok || !data.success) {
+
+                loginError.textContent =
+                    data.message ||
+                    "Invalid email or password.";
+
+                return;
             }
-        );
 
 
+            // ===========================
+            // LOGIN SUCCESS
+            // ===========================
 
-        /* =====================================================
-           LOGIN
-        ===================================================== */
-
-        loginForm.addEventListener(
-            "submit",
-            async function (event) {
-
-                event.preventDefault();
+            window.location.href =
+                "dashboard.html";
 
 
-                loginError.textContent = "";
+        } catch (error) {
 
+            console.error(error);
 
-                const email =
-                    loginEmail.value
-                        .trim()
-                        .toLowerCase();
+            loginError.textContent =
+                "Unable to connect to the server.";
 
+        }
 
-                const password =
-                    loginPassword.value;
+    }
+);
 
-
-
-                /* ---------------------------------------------
-                   VALIDATION
-                --------------------------------------------- */
-
-                if (
-                    email === "" ||
-                    password === ""
-                ) {
-
-                    loginError.textContent =
-                        "Please enter your email and password.";
-
-                    return;
-
-                }
-
-
-                if (
-                    !email.includes("@") ||
-                    !email.includes(".")
-                ) {
-
-                    loginError.textContent =
-                        "Please enter a valid email address.";
-
-                    return;
-
-                }
-
-
-
-                /* ---------------------------------------------
-                   GET REGISTERED USERS
-                --------------------------------------------- */
-
-                const users =
-                    JSON.parse(
-                        localStorage.getItem(
-                            "taskflowUsers"
-                        )
-                    ) || [];
-
-
-
-                /* ---------------------------------------------
-                   FIND USER
-                --------------------------------------------- */
-
-                const user =
-                    users.find(
-                        currentUser =>
-                            currentUser.email === email
-                    );
-
-
-
-                /*
-                    Do NOT tell the user whether
-                    email or password is incorrect.
-                */
-
-                if (!user) {
-
-                    loginError.textContent =
-                        "Invalid email or password.";
-
-                    return;
-
-                }
-
-
-
-                /* ---------------------------------------------
-                   HASH ENTERED PASSWORD
-                --------------------------------------------- */
-
-                const hashedPassword =
-                    await hashPassword(password);
-
-
-
-                /* ---------------------------------------------
-                   CHECK PASSWORD
-                --------------------------------------------- */
-
-                if (
-                    hashedPassword !==
-                    user.password
-                ) {
-
-                    loginError.textContent =
-                        "Invalid email or password.";
-
-                    return;
-
-                }
-
-
-
-                /* ---------------------------------------------
-                   CREATE SESSION
-                --------------------------------------------- */
-
-                localStorage.setItem(
-                    "isLoggedIn",
-                    "true"
-                );
-
-
-                localStorage.setItem(
-                    "username",
-                    user.username
-                );
-
-
-                localStorage.setItem(
-                    "email",
-                    user.email
-                );
-
-
-
-                /* ---------------------------------------------
-                   REDIRECT
-                --------------------------------------------- */
-
-                window.location.href =
-                    "dashboard.html";
-
-            }
-        );
-
-    </script>
+</script>
 
 
 </body>
