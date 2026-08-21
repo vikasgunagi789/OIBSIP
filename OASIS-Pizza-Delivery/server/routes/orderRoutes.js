@@ -1,8 +1,27 @@
 const express = require("express");
 
+const mongoose = require("mongoose");
+
 const router = express.Router();
 
-const Order = require("../models/Order");
+
+// =====================================================
+// MODELS
+// =====================================================
+
+const Order =
+    require("../models/Order");
+
+const Pizza =
+    require("../models/Pizza");
+
+const Inventory =
+    require("../models/Inventory");
+
+
+// =====================================================
+// AUTH MIDDLEWARE
+// =====================================================
 
 const authMiddleware =
     require("../middleware/authMiddleware");
@@ -14,34 +33,59 @@ const authMiddleware =
 // =====================================================
 
 router.post(
+
     "/",
+
     authMiddleware,
+
     async (req, res) => {
+
+        // -------------------------------------------------
+        // START DATABASE SESSION
+        // -------------------------------------------------
+
+        const session =
+            await mongoose.startSession();
+
 
         try {
 
             const {
+
                 items,
+
                 customer,
+
                 deliveryAddress,
+
                 subtotal,
+
                 deliveryFee,
+
                 tax,
+
                 total
+
             } = req.body;
 
 
-            // ---------------------------------------------
+            // =================================================
             // CHECK CART
-            // ---------------------------------------------
+            // =================================================
 
             if (
+
                 !items ||
+
                 !Array.isArray(items) ||
+
                 items.length === 0
+
             ) {
 
                 return res.status(400).json({
+
+                    success: false,
 
                     message:
                         "Your cart is empty."
@@ -51,13 +95,21 @@ router.post(
             }
 
 
-            // ---------------------------------------------
-            // CHECK USER
-            // ---------------------------------------------
+            // =================================================
+            // CHECK AUTHENTICATED USER
+            // =================================================
 
-            if (!req.user || !req.user._id) {
+            if (
+
+                !req.user ||
+
+                !req.user._id
+
+            ) {
 
                 return res.status(401).json({
+
+                    success: false,
 
                     message:
                         "User authentication failed."
@@ -67,38 +119,384 @@ router.post(
             }
 
 
-            // ---------------------------------------------
-            // CREATE ORDER
-            // ---------------------------------------------
+            // =================================================
+            // START TRANSACTION
+            // =================================================
 
-            const order =
-                await Order.create({
+            session.startTransaction();
 
-                    user:
-                        req.user._id,
 
-                    items,
+            // =================================================
+            // GET PIZZA IDS
+            // =================================================
 
-                    customer,
+            const pizzaIds =
+                items.map(
 
-                    deliveryAddress,
+                    item =>
+                        item.pizza
 
-                    subtotal,
+                );
 
-                    deliveryFee,
 
-                    tax,
+            // =================================================
+            // FIND PIZZAS
+            // =================================================
 
-                    total
+            const pizzas =
+                await Pizza.find({
+
+                    _id: {
+
+                        $in:
+                            pizzaIds
+
+                    }
+
+                }).session(session);
+
+
+            // =================================================
+            // CHECK PIZZAS
+            // =================================================
+
+            if (
+
+                pizzas.length !==
+                pizzaIds.length
+
+            ) {
+
+                throw new Error(
+
+                    "One or more pizzas could not be found."
+
+                );
+
+            }
+
+
+            // =================================================
+            // INGREDIENT REQUIREMENTS
+            // =================================================
+
+            const ingredientRequirements =
+                new Map();
+
+
+            // =================================================
+            // LOOP THROUGH ORDER ITEMS
+            // =================================================
+
+            for (
+
+                const orderItem
+                of items
+
+            ) {
+
+                // ---------------------------------------------
+                // FIND PIZZA
+                // ---------------------------------------------
+
+                const pizza =
+                    pizzas.find(
+
+                        p =>
+
+                            p._id.toString() ===
+                            orderItem.pizza.toString()
+
+                    );
+
+
+                if (!pizza) {
+
+                    throw new Error(
+
+                        "Pizza not found."
+
+                    );
+
+                }
+
+
+                // ---------------------------------------------
+                // GET QUANTITY
+                // ---------------------------------------------
+
+                const quantity =
+                    Number(
+
+                        orderItem.quantity
+
+                    );
+
+
+                // ---------------------------------------------
+                // VALIDATE QUANTITY
+                // ---------------------------------------------
+
+                if (
+
+                    !Number.isInteger(quantity) ||
+
+                    quantity < 1
+
+                ) {
+
+                    throw new Error(
+
+                        `Invalid quantity for ${pizza.name}.`
+
+                    );
+
+                }
+
+
+                // ---------------------------------------------
+                // CHECK PIZZA AVAILABILITY
+                // ---------------------------------------------
+
+                if (
+
+                    pizza.available === false
+
+                ) {
+
+                    throw new Error(
+
+                        `${pizza.name} is currently unavailable.`
+
+                    );
+
+                }
+
+
+                // ---------------------------------------------
+                // GET INGREDIENTS
+                // ---------------------------------------------
+
+                for (
+
+                    const ingredient
+                    of pizza.ingredients
+
+                ) {
+
+                    const ingredientName =
+                        ingredient.trim();
+
+
+                    if (!ingredientName) {
+
+                        continue;
+
+                    }
+
+
+                    const currentQuantity =
+                        ingredientRequirements.get(
+
+                            ingredientName
+
+                        ) || 0;
+
+
+                    ingredientRequirements.set(
+
+                        ingredientName,
+
+                        currentQuantity +
+                        quantity
+
+                    );
+
+                }
+
+            }
+
+
+            // =================================================
+            // CHECK INVENTORY
+            // =================================================
+
+            const inventoryItems = [];
+
+
+            for (
+
+                const [
+
+                    ingredientName,
+
+                    requiredQuantity
+
+                ]
+
+                of ingredientRequirements
+
+            ) {
+
+                // ---------------------------------------------
+                // FIND INVENTORY ITEM
+                // ---------------------------------------------
+
+                const inventoryItem =
+                    await Inventory.findOne({
+
+                        name: {
+
+                            $regex:
+
+                                `^${ingredientName}$`,
+
+                            $options:
+                                "i"
+
+                        }
+
+                    }).session(session);
+
+
+                // ---------------------------------------------
+                // INGREDIENT NOT FOUND
+                // ---------------------------------------------
+
+                if (!inventoryItem) {
+
+                    throw new Error(
+
+                        `Ingredient "${ingredientName}" is not available in inventory.`
+
+                    );
+
+                }
+
+
+                // ---------------------------------------------
+                // CHECK STOCK
+                // ---------------------------------------------
+
+                if (
+
+                    inventoryItem.stock <
+                    requiredQuantity
+
+                ) {
+
+                    throw new Error(
+
+                        `Not enough ${ingredientName} in stock. Available: ${inventoryItem.stock}, required: ${requiredQuantity}.`
+
+                    );
+
+                }
+
+
+                // ---------------------------------------------
+                // STORE FOR UPDATE
+                // ---------------------------------------------
+
+                inventoryItems.push({
+
+                    inventoryItem,
+
+                    requiredQuantity
 
                 });
 
+            }
 
-            // ---------------------------------------------
+
+            // =================================================
+            // REDUCE INVENTORY
+            // =================================================
+
+            for (
+
+                const {
+
+                    inventoryItem,
+
+                    requiredQuantity
+
+                }
+
+                of inventoryItems
+
+            ) {
+
+                inventoryItem.stock -=
+                    requiredQuantity;
+
+
+                await inventoryItem.save({
+
+                    session
+
+                });
+
+            }
+
+
+            // =================================================
+            // CREATE ORDER
+            // =================================================
+
+            const createdOrders =
+                await Order.create(
+
+                    [
+
+                        {
+
+                            user:
+                                req.user._id,
+
+                            items,
+
+                            customer,
+
+                            deliveryAddress,
+
+                            subtotal,
+
+                            deliveryFee,
+
+                            tax,
+
+                            total
+
+                        }
+
+                    ],
+
+                    {
+
+                        session
+
+                    }
+
+                );
+
+
+            const order =
+                createdOrders[0];
+
+
+            // =================================================
+            // COMMIT TRANSACTION
+            // =================================================
+
+            await session.commitTransaction();
+
+
+            // =================================================
             // RESPONSE
-            // ---------------------------------------------
+            // =================================================
 
-            res.status(201).json({
+            return res.status(201).json({
 
                 success: true,
 
@@ -111,26 +509,60 @@ router.post(
 
         }
 
+
         catch (error) {
 
+            // =================================================
+            // ROLLBACK TRANSACTION
+            // =================================================
+
+            if (
+
+                session.inTransaction()
+
+            ) {
+
+                await session.abortTransaction();
+
+            }
+
+
             console.error(
+
                 "Create order error:",
+
                 error
+
             );
 
 
-            res.status(500).json({
+            return res.status(400).json({
 
                 success: false,
 
                 message:
+
+                    error.message ||
+
                     "Failed to create order."
 
             });
 
         }
 
+
+        finally {
+
+            // =================================================
+            // CLOSE SESSION
+            // =================================================
+
+            await session.endSession();
+
+        }
+
     }
+
 );
 
 
@@ -140,8 +572,11 @@ router.post(
 // =====================================================
 
 router.get(
+
     "/my-orders",
+
     authMiddleware,
+
     async (req, res) => {
 
         try {
@@ -153,16 +588,24 @@ router.get(
                         req.user._id
 
                 })
+
                 .populate(
+
                     "items.pizza",
+
                     "name price image"
+
                 )
+
                 .sort({
-                    createdAt: -1
-                });
+
+                    createdAt:
+                        -1
+
+                );
 
 
-            res.json({
+            return res.json({
 
                 success: true,
 
@@ -172,15 +615,19 @@ router.get(
 
         }
 
+
         catch (error) {
 
             console.error(
+
                 "Get my orders error:",
+
                 error
+
             );
 
 
-            res.status(500).json({
+            return res.status(500).json({
 
                 success: false,
 
@@ -192,6 +639,7 @@ router.get(
         }
 
     }
+
 );
 
 
@@ -201,8 +649,11 @@ router.get(
 // =====================================================
 
 router.get(
+
     "/:id",
+
     authMiddleware,
+
     async (req, res) => {
 
         try {
@@ -217,19 +668,27 @@ router.get(
                         req.user._id
 
                 })
+
                 .populate(
+
                     "user",
+
                     "name email"
+
                 )
+
                 .populate(
+
                     "items.pizza",
+
                     "name price image"
+
                 );
 
 
-            // ---------------------------------------------
+            // =================================================
             // ORDER NOT FOUND
-            // ---------------------------------------------
+            // =================================================
 
             if (!order) {
 
@@ -245,11 +704,11 @@ router.get(
             }
 
 
-            // ---------------------------------------------
-            // SUCCESS
-            // ---------------------------------------------
+            // =================================================
+            // RESPONSE
+            // =================================================
 
-            res.json({
+            return res.json({
 
                 success: true,
 
@@ -259,15 +718,19 @@ router.get(
 
         }
 
+
         catch (error) {
 
             console.error(
+
                 "Get order error:",
+
                 error
+
             );
 
 
-            res.status(500).json({
+            return res.status(500).json({
 
                 success: false,
 
@@ -279,6 +742,7 @@ router.get(
         }
 
     }
+
 );
 
 
@@ -286,4 +750,6 @@ router.get(
 // EXPORT ROUTER
 // =====================================================
 
-module.exports = router;
+module.exports =
+    router;
+

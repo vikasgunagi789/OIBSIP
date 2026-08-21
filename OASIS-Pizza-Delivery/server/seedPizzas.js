@@ -2,193 +2,191 @@ const mongoose = require("mongoose");
 
 const dotenv = require("dotenv");
 
-const Pizza = require("./models/Pizza");
+const Inventory =
+    require("./models/Inventory");
 
 
 dotenv.config();
 
 
-const pizzas = [
+const inventoryItems = [
+
+    // =================================================
+    // PIZZA BASES
+    // =================================================
 
     {
+        name: "Classic Pizza Base",
+        category: "base",
+        stock: 50,
+        lowStockThreshold: 15
+    },
 
-        name: "VG Margherita",
+    {
+        name: "Thin Crust Base",
+        category: "base",
+        stock: 35,
+        lowStockThreshold: 10
+    },
 
-        description:
-            "Classic cheese pizza with rich tomato sauce and mozzarella.",
-
-        category: "veg",
-
-        price: 199,
-
-        image:
-            "https://images.unsplash.com/photo-1574071318508-1cdbab80d002",
-
-        ingredients: [
-            "Tomato Sauce",
-            "Mozzarella",
-            "Basil"
-        ],
-
-        rating: 4.6
-
+    {
+        name: "Cheese Burst Base",
+        category: "base",
+        stock: 25,
+        lowStockThreshold: 8
     },
 
 
+    // =================================================
+    // SAUCES
+    // =================================================
+
     {
+        name: "Classic Tomato Sauce",
+        category: "sauce",
+        stock: 40,
+        lowStockThreshold: 10
+    },
 
-        name: "VG Farmhouse",
+    {
+        name: "Spicy Peri Peri Sauce",
+        category: "sauce",
+        stock: 30,
+        lowStockThreshold: 8
+    },
 
-        description:
-            "Loaded with fresh capsicum, onion, tomato and mushrooms.",
-
-        category: "veg",
-
-        price: 249,
-
-        image:
-            "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38",
-
-        ingredients: [
-            "Capsicum",
-            "Onion",
-            "Tomato",
-            "Mushroom",
-            "Mozzarella"
-        ],
-
-        rating: 4.7
-
+    {
+        name: "Creamy Garlic Sauce",
+        category: "sauce",
+        stock: 25,
+        lowStockThreshold: 8
     },
 
 
+    // =================================================
+    // CHEESE
+    // =================================================
+
     {
+        name: "Mozzarella Cheese",
+        category: "cheese",
+        stock: 45,
+        lowStockThreshold: 15
+    },
 
-        name: "VG Paneer Tikka",
+    {
+        name: "Cheddar Cheese",
+        category: "cheese",
+        stock: 30,
+        lowStockThreshold: 10
+    },
 
-        description:
-            "Spicy paneer tikka with onions, capsicum and special sauce.",
-
-        category: "paneer",
-
-        price: 279,
-
-        image:
-            "https://images.unsplash.com/photo-1593560708920-61dd98c8a03a",
-
-        ingredients: [
-            "Paneer",
-            "Capsicum",
-            "Onion",
-            "Tikka Sauce",
-            "Mozzarella"
-        ],
-
-        rating: 4.8
-
+    {
+        name: "Cheese Blend",
+        category: "cheese",
+        stock: 35,
+        lowStockThreshold: 10
     },
 
 
+    // =================================================
+    // VEGETABLES
+    // =================================================
+
     {
-
-        name: "VG Veggie Delight",
-
-        description:
-            "A colourful combination of fresh vegetables and creamy cheese.",
-
-        category: "veg",
-
-        price: 229,
-
-        image:
-            "https://images.unsplash.com/photo-1579751626657-72bc17010498",
-
-        ingredients: [
-            "Sweet Corn",
-            "Capsicum",
-            "Onion",
-            "Olives",
-            "Mozzarella"
-        ],
-
-        rating: 4.5
-
+        name: "Onion",
+        category: "vegetable",
+        stock: 50,
+        lowStockThreshold: 15
     },
 
+    {
+        name: "Capsicum",
+        category: "vegetable",
+        stock: 45,
+        lowStockThreshold: 15
+    },
 
     {
+        name: "Tomato",
+        category: "vegetable",
+        stock: 40,
+        lowStockThreshold: 12
+    },
 
-        name: "VG Cheese Burst",
+    {
+        name: "Sweet Corn",
+        category: "vegetable",
+        stock: 35,
+        lowStockThreshold: 10
+    },
 
-        description:
-            "Extra cheesy pizza made for serious cheese lovers.",
-
-        category: "special",
-
-        price: 299,
-
-        image:
-            "https://images.unsplash.com/photo-1574071318508-1cdbab80d002",
-
-        ingredients: [
-            "Mozzarella",
-            "Cheese Sauce",
-            "Cheese Burst Base"
-        ],
-
-        rating: 4.9
-
+    {
+        name: "Jalapeno",
+        category: "vegetable",
+        stock: 25,
+        lowStockThreshold: 8
     }
 
 ];
 
 
-const seedPizzas = async () => {
+const seedInventory =
+    async () => {
 
-    try {
+        try {
 
-        await mongoose.connect(
-            process.env.MONGO_URI
-        );
-
-
-        console.log(
-            "MongoDB connected."
-        );
+            await mongoose.connect(
+                process.env.MONGO_URI
+            );
 
 
-        await Pizza.deleteMany();
+            console.log(
+                "MongoDB connected."
+            );
 
 
-        await Pizza.insertMany(
-            pizzas
-        );
+            await Inventory.deleteMany({});
 
 
-        console.log(
-            `${pizzas.length} pizzas inserted successfully.`
-        );
+            await Inventory.insertMany(
+                inventoryItems
+            );
 
 
-        await mongoose.connection.close();
+            console.log(
+                `${inventoryItems.length} VG PIZZA inventory items added successfully.`
+            );
 
 
-        process.exit(0);
+            await mongoose.disconnect();
 
 
-    } catch (error) {
-
-        console.error(
-            "SEED ERROR:",
-            error
-        );
+            console.log(
+                "MongoDB disconnected."
+            );
 
 
-        process.exit(1);
+            process.exit(0);
 
-    }
+        }
 
-};
+        catch (error) {
+
+            console.error(
+                "Inventory seed error:",
+                error
+            );
 
 
-seedPizzas();
+            await mongoose.disconnect();
+
+
+            process.exit(1);
+
+        }
+
+    };
+
+
+seedInventory();
